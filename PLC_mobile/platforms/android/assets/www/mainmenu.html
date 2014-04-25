@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title></title>
+
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
+	<script src="js/libs/jquery/jquery-1.7.1.min.js"></script>		
+	<script src="js/libs/underscore/underscore-min.js"></script>
+	<script src="js/libs/backbone/backbone-min.js"></script>
+	<script src="js/libs/bootstrap/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+
+		<div class="row">
+			
+			<div class="col-lg-12 text-center">
+				<img src="img/nuevosuperior02.png" class="img-rounded" style="width:100%">
+			</div>
+
+			
+			<!-- BARRA NAVEGACION -->
+
+			<div class="navbar col-lg-12">
+				
+
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+				    <ul class="nav navbar-nav">
+
+				        <li class="consulta"><a onclick="location.href='index.html'">Consulta</a></li>
+						<li class="gestion servicios"><a onclick="location.href='index.html#/solicitudes'">Gestión Servicios</a></li>
+						<li class="administracion"><a >Administración</a></li>
+				      
+				    </ul>
+				    
+				    <ul class="nav navbar-nav navbar-right">
+				      	<li class="navbar-text"><p>Carlos Ramirez</p></li>
+						<li><a onclick="location.href='login.html'">(cerrar sesión)</a></li>
+				    </ul>
+				</div>
+
+				<ul class="breadcrumb">
+				  <li class="active">Inicio</li>
+				</ul>
+			</div>	
+
+			<div class="well col-lg-12">
+
+				<div class="row">
+					<div class="col-lg-4">
+						<div class="panel panel-info">
+						  	<div class="panel-heading">
+						    	<h3 class="panel-title">Consultas</h3>
+						  	</div>
+						  	<div class="panel-body">
+								<button type="button" class="btn btn-default btn-lg col-lg-12" onclick="location.href='index.html'"><i class="glyphicon glyphicon-book"></i>Consulta Ficha</button>   
+						  	</div>
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="panel panel-info">
+						  	<div class="panel-heading">
+						    	<h3 class="panel-title">Gestión Servicios</h3>
+						  	</div>
+						  	<div class="panel-body">
+						    	<button type="button" class="btn btn-default btn-lg col-lg-12 " onclick="location.href='index.html#/solicitudes'"><i class="glyphicon glyphicon-search"></i>Ayudas Sociales</button> 
+						    	<button type="button" class="btn btn-default btn-lg col-lg-12 " disabled><i class="glyphicon glyphicon-usd"></i>Subvenciones Municipales</button>  
+						    	<button type="button" class="btn btn-default btn-lg col-lg-12 " disabled><i class="glyphicon glyphicon-tint"></i>Entrega de Agua y Estanques</button>   
+						 	 </div>
+						</div>
+					</div>
+
+					<div class="col-lg-4">
+						<div class="panel panel-info">
+						  	<div class="panel-heading">
+						    	<h3 class="panel-title">Administración</h3>
+						  	</div>
+						  	<div class="panel-body">
+						    	<button type="button" class="btn btn-default btn-lg col-lg-12 " disabled><i class="glyphicon glyphicon-user"></i>Personas y Organizaciones</button>  
+						    	<button type="button" class="btn btn-default btn-lg col-lg-12 " disabled><i class="glyphicon glyphicon-home"></i>Hogares</button>  
+						    	<button type="button" class="btn btn-default btn-lg col-lg-12 "><i class="glyphicon glyphicon-cog"></i>Parámetros</button>  
+						  	</div>
+						</div>
+					</div>
+				
+			</div>
+
+		</div>
+
+
+
+    </div>
+</body>
+</html>

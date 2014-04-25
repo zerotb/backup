@@ -1,0 +1,2923 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width">
+	<title>PLC</title>
+	
+	<link href="css/jquery.alerts.css" rel="stylesheet">
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
+	<link href="css/datepicker.css" rel="stylesheet">	
+	<!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script> -->
+  <script src="cordova.js"></script>  
+
+	<script src="js/libs/jquery/jquery-1.7.1.min.js"></script>		
+	<script src="js/libs/underscore/underscore-min.js"></script>
+	<script src="js/libs/backbone/backbone-min.js"></script>
+	<script src="js/libs/bootstrap/bootstrap.min.js"></script>
+	<script src="js/libs/bootstrap/bootstrap-datepicker.js"></script>	
+	<script type="text/javascript" src="js/codigo-app.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-consulta.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-menu.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-solicitudes.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-router.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-models.js?v=13"></script>
+	<script type="text/javascript" src="js/jquery.alerts.js"></script>
+	<script type="text/javascript" src="js/codigo-params.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-adminPersonas.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-hogares.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo_funciones.js?v=13"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+  <script type="text/javascript" src="js/googleMap.js"></script>
+  <script type="text/javascript" src="js/jquery.validate.js"></script>
+  <script type="text/javascript" src="js/validacionesForm.js"></script>
+	<script type="text/javascript" src="js/jquery.Rut.js"></script>
+  <script type="text/javascript" src="js/plc_mensajes.js"></script>
+  <script type="text/javascript" src="js/conversor_coordenadas.js">
+
+
+    </script>
+
+
+  <script language="javascript">
+      var Url = location.href;
+      Url = Url.replace(/.*\?(.*?)/,"$1");
+      Variables = Url.split ("&");
+      for (i = 0; i < Variables.length; i++) {
+      Separ = Variables[i].split("=");
+      eval ('var '+Separ[0]+'="'+Separ[1]+'"');
+      }
+      //Para comprobarlo:
+      App.token=t;
+  </script>
+
+	
+
+	<script type="text/javascript">
+		
+    document.addEventListener("deviceready", onDeviceReady, false);
+    function onDeviceReady (){
+      console.log("cordova ready");
+    }
+
+    function IrAListapersonas(){
+			//para obligar hacer el reload al ir a la pagina #persona
+			location.href="#personas";
+			// location.reload();
+		}
+
+    function showConfirm() {
+        navigator.notification.confirm(
+            '¿Realmente desea cerrar su sesión?',  // message
+            exitFromApp,              // callback to invoke with index of button pressed
+            'Cerrar Sesión',            // title
+            'Cancelar,OK'         // buttonLabels
+        );
+    }
+ 
+    
+    function exitFromApp(buttonIndex) {
+        console.log("Exit function");
+      if (buttonIndex==2){
+         window.location.href='login.html';
+       
+      }
+    }
+
+    var nua = navigator.userAgent;
+    var isAndroid = (nua.indexOf('Mozilla/5.0') > -1 && nua.indexOf('Android ') > -1 && nua.indexOf('AppleWebKit') > -1 && nua.indexOf('Chrome') === -1);
+    if (isAndroid) {
+      $('select.form-control').removeClass('form-control').css('width', '100%');
+    }
+
+
+
+	</script>
+
+<style type="text/css">
+  .error{
+    color: red;
+  }
+
+  .text-color-red { 
+  	color: red; 
+  }
+
+  .text-color-blue { 
+  	color: blue; 
+  }
+
+  .text-align-right { 
+    text-align: right; 
+  }
+
+</style>
+
+
+</head>
+
+<body>
+
+
+		<!-- CONTENIDO -->
+	<div class="container-fluid">
+		
+
+    		<div class="row">
+  <!--  			
+          <div class="menulateral" style="display: none;">
+
+             
+                  <div class="panel panel-info">
+                      <div class="panel-heading">
+                          <h3 class="panel-title">Menu</h3>
+                      </div>
+                      <div class="panel-body">
+
+                          <div class="btn-group-vertical col-xs-12">
+                              
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_consulta" onclick="location.href='index.html';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/consulta-ficha-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Menú</button> 
+
+                              <div class="divider"></div></br>
+
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_consulta" onclick="location.href='index.html#/consulta';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/consulta-ficha-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Consulta Ficha</button> 
+
+                              <div class="divider"></div></br>
+
+
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio1" onclick="location.href='index.html#/solicitudes/1';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/ayudas-sociales-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Ayudas Sociales</button> 
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio2" onclick="location.href='index.html#/solicitudes/2';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/subvenciones-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Subvenciones Municipales</button>  
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio3" onclick="location.href='index.html#/solicitudes/3';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/entrega-agua-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Entrega de Agua y Estanques</button> 
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio4" onclick="location.href='index.html#/solicitudes/4';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/caminos-vecinales-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Caminos Vecinales</button>    
+
+                              
+
+                              <div class="divider"></div></br>
+
+
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_gestion" onclick="location.href='index.html#/personas';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/personas-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Personas y Organizaciones</button> 
+
+                               
+                              <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_gestion" onclick="location.href='index.html#/hogares';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/hogares-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Hogares</button>  
+
+                              <div class="divider"></div></br>
+
+                              <button type="button" class="btn btn-default  col-xs-12 col-lg-12 col-md-12 perfiles perfil_admin" onclick="location.href='login.html';javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8');" style="font-size: 14px;"><img src="img/parametros-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Cerrar Sesión</button>
+                              <button type="button" class="btn btn-default  col-xs-12 col-lg-12 col-md-12 perfiles perfil_admin" onclick="javascript: showConfirm();" style="font-size: 14px;"><img src="img/parametros-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Salir</button>
+
+                              
+
+                              </div>
+                              
+
+
+
+
+                       </div>
+                  </div>
+                  
+              
+
+          </div>-->
+          <div class="maindiv">
+
+    			<!-- <div class="col-xs-12 col-lg-12 col-md-12 text-center">
+    				<img src="img/header2.jpg" class="img-rounded" style="width:100%">
+    			</div> -->
+
+    
+<!-- <form name="frmConverter" onsubmit="0">
+<table border="0">
+<tbody><tr>
+<th colspan="2" align="center">Geografica</th>
+<th align="center">To/From</th>
+<th colspan="2" align="center">UTM</th>
+</tr>
+<tr>
+<td align="right">lon</td>
+<td><input type="text" size="15" name="txtLongitude" value=""></td>
+<td align="center"><input type="button" size="4" name="btnToUTM" value="&gt;&gt;" onclick="btnToUTM_OnClick ()"> </td>
+<td align="right">x</td>
+<td><input type="text" size="15" name="txtX" value=""></td>
+</tr>
+
+<tr>
+<td align="right">lat</td>
+<td><input type="text" size="15" name="txtLatitude" value=""></td>
+<td align="center"><input type="button" size="4" name="btnToGeographic" value="&lt;&lt;" onclick="btnToGeographic_OnClick()"></td>
+<td align="right">y </td>
+<td><input type="text" size="15" name="txtY" value=""></td>
+</tr>
+
+<tr>
+<td colspan="3"></td>
+<td align="right">zona</td>
+<td><input type="text" size="4" name="txtZone" value=""></td>
+</tr>
+
+<tr>
+<td colspan="3"></td>
+<td colspan="2">
+    hemisferio                                 
+
+    <input type="radio" name="rbtnHemisphere" value="N" checked="" onclick="0">N
+    <input type="radio" name="rbtnHemisphere" value="S" onclick="0">S
+</td>
+</tr>
+
+</tbody></table>
+</form> -->
+			<!-- BARRA NAVEGACION -->
+<!--
+ 			<div class="navbar col-xs-12 col-lg-12 col-md-12">
+
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+				    <ul id="menuSuperior" class="col-xs-8 col-lg-8 col-md-8 nav nav-pills" style="display:none;">
+				        <li class="consulta perfil_consulta perfiles"><a href="index.html#/consulta">Consulta</a></li>
+				        <li class="dropdown solicitudes">
+				            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Gestión Servicios <span class="caret"></span></a>
+                              <ul class="dropdown-menu">
+                                <li class="perfiles perfil_servicio1"><a href="index.html#/solicitudes/1">Ayudas Sociales</a></li>
+                                <li class="perfiles perfil_servicio2"><a href="index.html#/solicitudes/2">Subvenciones Municipales</a></li>
+                                <li class="perfiles perfil_servicio3"><a href="index.html#/solicitudes/3">Entrega de Agua y Estanques</a></li>
+                              </ul>
+				        </li>
+				        <li class="dropdown administracion">
+				            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                  Administración<span class="caret"></span>
+                              </a>
+                              <ul class="dropdown-menu">
+                                <li class="perfiles perfil_gestion"><a href="javascript:void(0)" onclick="IrAListapersonas()">Personas y Organizaciones</a></li>
+                                <li class="perfiles perfil_gestion"><a href="index.html#/hogares">Hogares</a></li>
+                                <li class="perfiles perfil_admin"><a href="../site/">Parámetros</a></li>
+                              </ul>
+				        </li>
+				      
+				    </ul>
+				    
+				    <ul id="sesionName" class="col-xs-4 col-lg-4 col-md-4 nav navbar-nav navbar-right text-right">
+				      	
+				    </ul>
+				</div>
+
+				
+			</div> 
+			<ul class="breadcrumb">
+                  <li><a href='index.html'>Inicio</a></li>                
+                </ul>-->  
+
+          <nav class="navbar navbar-default" role="navigation">
+            <div class="col-xs-4">
+              <!--<button type="button" class="btn btn-lg navbar-btn  " onclick="javascript:$('.menulateral').toggleClass('col-xs-4');$('.menulateral').toggle();$('.maindiv').toggleClass('col-xs-8'); "><span class="glyphicon glyphicon-list"> <span class="glyphicon glyphicon-chevron-down"></button>-->
+
+              <!-- Single button -->
+              <div class="btn-group-lg">
+                <button type="button" class="btn btn-lg dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-list"></span><span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" role="menu">
+                  <li>
+                  <a>
+
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_consulta" onclick="location.href='index.html';" style="font-size: 14px;"><img src="img/consulta-ficha-35.png" class="img-circle img-responsive pull-left" height="35" width="35"><span style="padding-top: 20px;">Menú</span></button> 
+                  </a>
+                  </li>
+
+                  <li class="divider"></li>
+
+                  <li>
+                  <a>
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_consulta" onclick="location.href='index.html#/consulta';" style="font-size: 14px;"><img src="img/consulta-ficha-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Consulta Ficha</button> 
+                  </a>
+                  </li>
+
+                  <li class="divider"></li>
+
+                  <li>
+                  <a>
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio1" onclick="location.href='index.html#/solicitudes/1';" style="font-size: 14px;"><img src="img/ayudas-sociales-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Ayudas Sociales</button> 
+                  </a>
+                  </li>
+
+                  <li>
+                  <a>
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio2" onclick="location.href='index.html#/solicitudes/2';" style="font-size: 14px;"><img src="img/subvenciones-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Subvenciones Municipales</button>
+                  </a>
+                  </li>
+
+                  <li>
+                  <a>
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio3" onclick="location.href='index.html#/solicitudes/3';" style="font-size: 14px;"><img src="img/entrega-agua-35.png" class="img-circle img-responsive pull-left" height="35" width="35"><span>Entrega de Agua y Estanques</span></button> 
+                  </a>
+                  </li>
+                  
+                  <li>
+                  <a>
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio4" onclick="location.href='index.html#/solicitudes/4';" style="font-size: 14px;"><img src="img/caminos-vecinales-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Caminos Vecinales</button> 
+                  </a>
+                  </li>
+
+                  <li class="divider"></li>
+                  
+                  <li>
+                  <a> 
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_gestion" onclick="location.href='index.html#/personas';" style="font-size: 14px;"><img src="img/personas-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Personas y Organizaciones</button> 
+                  </a>
+                  </li>
+
+                  <li>
+                  <a>
+                  <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_gestion" onclick="location.href='index.html#/hogares';" style="font-size: 14px;"><img src="img/hogares-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Hogares</button>  
+                  </a>
+                  </li>
+
+                  <li class="divider"></li>
+
+                  <li>
+                  <a>
+                  <button type="button" class="btn btn-default  col-xs-12 col-lg-12 col-md-12 perfiles perfil_admin" onclick="javascript: showConfirm();" style="font-size: 14px;"><img src="img/parametros-35.png" class="img-circle img-responsive pull-left" height="35" width="35">Cerrar Sesión</button>
+                  </a>
+                  </li>
+
+
+
+                </ul>
+              </div>
+            </div>
+            <div class="col-xs-8"><h3>Padre Las Casas</h3></div>
+           
+            
+           
+          </nav>
+
+          
+          
+ 
+            
+          <div class="seccion menu col-xs-12 col-lg-12 col-md-12" style="display:none;"></div>
+            
+    			<div class="seccion consulta col-xs-12 col-lg-12 col-md-12"></div>
+
+    			<div class="seccion solicitudes col-xs-12 col-lg-12 col-md-12"></div>
+    			
+    			<div class="seccion adminHogares col-xs-12 col-lg-12 col-md-12"></div> 
+
+    			<div class="seccion personas col-xs-12 col-lg-12 col-md-12"> </div> 
+
+ 
+          </div>
+
+
+		</div>
+
+
+
+
+	</div>	
+
+
+    <!-- TEMPLATES -->
+    <!-- ------------------------------------ -->
+    <!-- ----------nombre de la sesión-------->
+    <!-- ------------------------------------ -->
+    <script type="text/template" id="template_SesionMainView">
+        <li class="navbar-text">Bienvenido <%= username %></li>
+        <li><a href='<%= App.baseurl %>/user/logout'>(Cerrar sesión)</a></li>
+    </script>
+
+
+    <!-- --------------------------------- -->
+    <!-- ----------MENU ------------------>
+    <!-- -------------------------------- -->
+    <script type="text/template" id="template_MenuMainView"> 
+        <div class="row">
+
+                <div class="row well well-sm col-xs-12 col-lg-12 col-md-12">
+                    <div class="col-xs-4 col-lg-4 col-md-4">
+                        <div style="font-size:36px; padding-top:24px;">Consultas</div>
+                    </div>
+
+                    <div class="col-xs-8 col-lg-8 col-md-8">
+                        <div class="panel panel-info">
+
+                            <div class="panel-body">
+                                <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_consulta" onclick="location.href='index.html#/consulta'" style="font-size: 20px;"><img src="img/consulta-ficha-45.png" class="img-circle img-responsive pull-left" height="45" width="45"><div style=" font-size: 30px;">Consulta Ficha</div></button>   
+                            </div>
+                        </div>
+                    </div>
+                </div>  
+
+                <div class="row well well-sm col-xs-12 col-lg-12 col-md-12">
+                    <div class="col-xs-4 col-lg-4 col-md-4">
+                        <div style="font-size:36px; padding-top:115px;">Gestión Servicios</div>
+                    </div>
+                    <div class="col-xs-8 col-lg-8 col-md-8">
+                        <div class="panel panel-info">
+
+                            <div class="panel-body">
+                                <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio1" onclick="location.href='index.html#/solicitudes/1'" style="font-size: 20px;"><img src="img/ayudas-sociales-45.png" class="img-circle img-responsive pull-left" height="45" width="45"><div style="font-size: 30px;">Ayudas Sociales</div></button> 
+                                <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio2" onclick="location.href='index.html#/solicitudes/2'" style="font-size: 20px;"><img src="img/subvenciones-45.png" class="img-circle img-responsive pull-left" height="45" width="45"><div style="font-size: 30px;">Subvenciones Municipales</div></button>  
+                                <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio3" onclick="location.href='index.html#/solicitudes/3'" style="font-size: 20px;"><img src="img/entrega-agua-45.png" class="img-circle img-responsive pull-left" height="45" width="45"><div style="font-size: 30px;">Entrega de Agua y Estanques</div></button>   
+                                <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_servicio4" onclick="location.href='index.html#/solicitudes/4'" style="font-size: 20px;"><img src="img/caminos-vecinales-45.png" class="img-circle img-responsive pull-left" height="45" width="45"><div style="font-size: 30px;">Caminos Vecinales</div></button>  
+                             </div>
+                        </div>
+                    </div>
+                </div> 
+
+                <div class="row well well-sm col-xs-12 col-lg-12 col-md-12">
+                    <div class="col-xs-4 col-lg-4 col-md-4">
+                        <div style="font-size:36px; padding-top:50px;">Administración</div>
+                    </div>  
+
+                    <div class="col-xs-8 col-lg-8 col-md-8">
+                        <div class="panel panel-info">
+
+                            <div class="panel-body">
+
+                                <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_gestion" onclick="location.href='index.html#/personas'" style="font-size: 20px;"><img src="img/personas-45.png" class="img-circle img-responsive pull-left" height="45" width="45"><div style="font-size: 30px;">Personas y Organizaciones</div></button>  
+                                <button type="button" class="btn btn-default col-xs-12 col-lg-12 col-md-12 perfiles perfil_gestion" onclick="location.href='index.html#/hogares'" style="font-size: 20px;"><img src="img/hogares-45.png" class="img-circle img-responsive pull-left" height="45" width="45"><div style="font-size: 30px;">Hogares</div></button>  
+
+
+                            </div>
+                        </div>
+                    </div> 
+                </div> 
+
+            </div>
+    </script>
+
+    
+     <!-- ------------------------------------------- -->
+    <!-- ----------Administracion Hogares------------   -->
+    <!-- -------------------------------------------- -->
+    <!-- AdminPersonasMainView -->
+    <script type="text/template" id="template_AdminHogaresMainView"> 
+        <div class="row">
+            <div class="well">
+                <div class="well filtroHogares" style="font-size:14px;">
+                    
+                </div>
+
+                <div class="col-xs-12 col-lg-12 col-md-12 admin_hogares">
+                        
+                </div>
+            </div>
+            
+       </div>
+    </script>
+    
+    <script type="text/template" id="template_HogaresFiltroView">
+        <div class="col-xs-12 col-lg-12 col-md-12">            
+
+              <img src="img/hogares.png" class="img-circle img-responsive pull-left" height="50" width="50" style="padding-right:10px"><span style="font-size:24px;"> Administración Hogares</span>
+        </div>
+        </br>  
+        <form id ="filtroHogares"class="form-horizontal" role="form">
+            <div class="form-group"> 
+                    <div class="col-xs-3 col-lg-3 col-md-3">
+                        <label  class="col-xs-6 col-lg-6 col-md-6 control-label text-right">ID HOGAR:</label>
+                        <div class="col-xs-6 col-lg-6 col-md-6">
+                            <input type="text" class="form-control filtro id_hogar"  value="">
+                        </div>
+                    </div>     
+                    <div class="col-xs-3 col-lg-3 col-md-3">
+                        <label  class="col-xs-5 col-lg-5 col-md-5 control-label text-right">RUT JH:</label>
+                        <div class="col-xs-7 col-lg-7 col-md-7">
+                            <input type="text" class="form-control filtro rut"  value="">
+                        </div>
+                    </div> 
+                    <div class="col-xs-5 col-lg-5 col-md-5">
+                        <label  class="col-xs-5 col-lg-5 col-md-5 control-label text-right">NOMBRE JH:</label>
+                        <div class="col-xs-7 col-lg-7 col-md-7">
+                            <input type="text" class="form-control filtro nombre"  value="">
+                        </div>  
+                    </div>               
+            </div>
+        </form>
+
+    </script>
+    
+    
+    <script type="text/template" id="template_HogaresListView"> 
+        
+        <label class="control-label">Se encontraron <%= cantidadRegistros %>  hogares</label>
+        <table class="table table-striped hogares" style="font-size:16px;">
+          <thead>
+            <tr>
+              <th>ID HOGAR</th>
+              <th>RUT JH</th>
+              <th>NOMBRE JEFE DE HOGAR(JH)</th>       
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+          </tbody>
+        </table>
+        
+        <div class="row">
+            <div class="col-xs-4 col-lg-4 col-md-4">
+               <!-- <a id="urlExcel" target="_blank"><span>Exportar resultados a Excel <i class="glyphicon glyphicon-download-alt"></i></span></a> -->  
+            </div>
+
+            <div class="col-xs-4 col-lg-4 col-md-4">
+                <ul class="pagination">
+                </ul>
+            </div>
+            <div class="col-xs-4 col-lg-4 col-md-4">
+                <a class='btn btn-default pull-right nuevo_hogar' >Nuevo Hogar</a>
+            </div>
+        </div>
+
+    </script>
+    <!-- SolicitudesServiciosSolicitadosListView -->
+    <script type="text/template" id="template_HogaresItemView"> 
+        
+          <td><%= _id %></td>
+          <td><a onclick="location.href='index.html#consulta/persona/<%= _embedded.jefeHogar.id %>'"><%= _embedded.jefeHogar.id %>-<%= entregarDigitoVerificador(_embedded.jefeHogar.id) %></a></td>
+          <td><%= _embedded.jefeHogar._label %></td>
+          <td>
+            <button class="btn btn-default boton edicion" ><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" title="Editar"></span></button> 
+            <button class="btn btn-default boton eliminar" ><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Eliminar"></span></button>
+          </td>
+
+    </script>
+    
+
+    <script type="text/template" id="template_HogaresNuevoHogarView">        
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">AGREGAR/EDITAR - HOGAR</h4>
+              </div>
+              <div class="modal-body">
+                    <div class="row well registroNuevo">
+                        <div class="form-group">                            
+                            <div class="input-group col-xs-6 col-lg-6 col-md-6">
+                                <label  class="control-label">RUT JEFE HOGAR: </label>
+                                <%= _embedded.jefeHogar.id %>-<%= entregarDigitoVerificador(_embedded.jefeHogar.id) %>
+                            </div>                            
+                            <div class="input-group col-xs-6 col-lg-6 col-md-6">
+                                <label  class="control-label">NOMBRE JEFE HOGAR: </label>
+                                <%= _embedded.jefeHogar._label %>
+                            </div>  
+                        </div>
+                    </div>
+                    <div class="row well">
+                        <div class="form-group">
+                            <div class="input-group col-xs-3 col-lg-3 col-md-3">
+                                    <input type="text" class="form-control input-sm persona_rut" placeholder="RUT nuevo integrante">
+                                    <span class="input-group-addon" style="padding: 0;">                                                
+                                        <button class="btn button_persona_rut" type="button"><i class="glyphicon glyphicon-search"></i></button>                                                  
+                                    </span>                                                                                     
+                            </div>
+                            <div class="input-group col-xs-4 col-lg-4 col-md-4 agregarIntegrante" style="display: none">
+                                    <label>NOMBRE: </label>
+                                    <label class="nombre_integrante_nuevo"></label>
+                            </div>
+                            <div class="input-group col-xs-3 col-lg-3 col-md-3 agregarIntegrante" style="display: none">
+                                    <input type="text" class="form-control input-sm persona_rol" placeholder="Rol/Relación con JH">
+                            </div>
+                            <div class="input-group col-xs-2 col-lg-2 col-md-2 agregarIntegrante" style="display: none">
+                                <button type="button" class="btn btn-primary btn-xs agregarIntegrante">Agregar Integrante</button>
+                                <button type="button" class="btn btn-primary btn-xs registroNuevo" style="display:none;">Crear Hogar y agregar Jefe de Hogar</button>                                
+                            </div>
+                        </div>  
+                    </div>       
+                    <div class="row well newPersona" style="display:none;">
+                        <form id="formPersona">
+                            <div class="form-group">
+                                <p class="text-muted">Para ingresar una nueva persona es necesario completar los siguientes campos:</p>
+                                <div class="input-group col-xs-3 col-lg-3 col-md-3">
+                                        <label class="control-label">RUT:</label>
+                                        <input type="hidden" value="" class="form-control input-sm newPersonaRut">
+                                        <label class="control-label newLabelPersonaRut"></label>                                                                                    
+                                </div>
+                                <div class="input-group col-xs-2 col-lg-2 col-md-2">
+                                        <input name="newPersonaNombre" id="newPersonaNombre" type="text" class="form-control input-sm newPersonaNombre required" placeholder="Nombre">
+                                 </div>
+                                <div class="input-group col-xs-2 col-lg-2 col-md-2">
+                                        <input name="newPersonaApPaterno" id="newPersonaApPaterno" type="text" class="form-control input-sm newPersonaApPaterno required" placeholder="Apellido paterno">
+                                </div>
+                                <div class="input-group col-xs-2 col-lg-2 col-md-2">
+                                        <input name="newPersonaApMaterno" id="newPersonaApMaterno" type="text" class="form-control input-sm newPersonaApMaterno required" placeholder="Apellido materno">
+                                </div>
+                                <div class="input-group col-xs-3 col-lg-3 col-md-3 text-center">
+                                    <button type="button" class="btn btn-primary btn-xs btnNewPersona">Crear Persona</button>                                                                
+                                </div>
+                            </div>  
+                        </form>
+                    </div>  
+                    <p class="text-muted">Listado de integrantes del hogar</p>           
+                    <table class="table table-striped hogares_integrantes" style="font-size: 16px;">
+                      <thead>
+                        <tr>
+                          <th>J. HOGAR</th>
+                          <th>RUT</th>
+                          <th>NOMBRE INTEGRANTE</th>  
+                          <th>ROL/RELACIÓN CON JH</th>
+                          <th>EDAD</th>       
+                          <th>ACCIONES</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                       
+                      </tbody>
+                    </table>
+              </div>
+              <div class="modal-footer">
+                <a class='btn btn-default cancel' data-dismiss="modal">Cerrar</a>
+                <a class='btn btn-primary save' style="display: none">Guardar</a>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        
+
+    </script>
+    
+    <script type="text/template" id="template_HogaresIntegrantesItemView"> 
+          <td><input type="radio" class="radioJefeHogar" name="jefeHogar" jefehogar="<%=_embedded.hogar._label %>" value="<%= _embedded.persona.id %>" <%= (_embedded.persona.id == _embedded.hogar._label)? 'checked':'' %>></td>
+          <td><%= _embedded.persona.id %>-<%= entregarDigitoVerificador(_embedded.persona.id) %></td>
+          <td><%= _embedded.persona._label %></td>
+          <td class='TDcondicion_hogar'><input type="hidden" value="<%= condicion_en_hogar %>" class="hiddenCondicion"/><div class="Divcontenedor"><%= condicion_en_hogar %></div></td>
+          <td><%= calcularEdad(miembro.fecha_nacimiento) %></td>          
+          <td>
+             <%= (_embedded.persona.id == _embedded.hogar._label)? '':'<button class="btn btn-default boton edicion"><span class="glyphicon glyphicon-pencil" data-toggle="tooltip" title="Editar"></span></button>  <button class="btn btn-default boton eliminar"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Eliminar"></span></button>' %>                          
+             
+          </td>
+
+    </script>
+     <!--template_HogaresAsociacionHogarView----- Utilizado en Personas y ORganizaciones-->
+       <script type="text/template" id="template_HogaresAsociacionHogarView">        
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">ASOCIAR UN HOGAR</h4>
+              </div>
+              <div class="modal-body">
+                    <div class="row well registroNuevo">
+                        <p class="text-muted">Indique el RUT o el nombre del Jefe de Hogar.</p>
+                        <div class="form-group">                            
+                            <div class="input-group col-xs-5 col-lg-5 col-md-5">
+                                <label  class="col-xs-6 col-lg-6 col-md-6 control-label text-right" style="margin-top: 10px;">RUT:</label>
+                                <div class="input-group col-xs-6 col-lg-6 col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control persona_rut">                                                                  
+                                        <span class="input-group-addon" style="padding: 0;">                                                
+                                            <button class="btn button_persona_rut busqueda_rut" type="button"><i class="glyphicon glyphicon-search"></i></button>                                                  
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>          
+                            <div class="input-group col-xs-2 col-lg-2 col-md-2"></div>                  
+                            <div class="input-group col-xs-5 col-lg-5 col-md-5">
+                                <label  class="col-xs-6 col-lg-6 col-md-6 control-label text-right" style="margin-top: 10px;">NOMBRE:</label>
+                                <div class="input-group col-xs-6 col-lg-6 col-md-6">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control persona_nombre">
+                                        <span class="input-group-addon" style="padding: 0;">                                                
+                                            <button class="btn button_persona_rut busqueda_nombre" type="button"><i class="glyphicon glyphicon-search"></i></button>                                                  
+                                        </span>
+                                    </div>
+                                </div> 
+                            </div>  
+                        </div>
+                    </div>
+                    <label class="control-label cantidadRegistros"></label>          
+                    <table class="table table-striped hogares_asociacion" style="font-size: 16px;">
+                      <thead>
+                        <tr>
+                          <th>SELECCIÓN</th>
+                          <th>ID HOGAR</th>
+                          <th>RUT</th>
+                          <th>NOMBRE JEFE DE HOGAR</th>  
+                          <th>ROL/RELACIÓN CON JH</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                       
+                      </tbody>
+                    </table>
+              </div>
+              <div class="modal-footer">
+                <a class='btn btn-default cancel' data-dismiss="modal">Cerrar</a>
+                <a class='btn btn-primary save' style="display: none">Guardar</a>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+    </script>
+    <script type="text/template" id="template_HogaresIntegrantesAsociacionesItemView"> 
+          <td><input type="radio" class="radioSeleccion" <%=(existeHogarAsociado)?'disabled':'' %> name="hogar" value="<%= id %>"/></td>
+          <td><%= id %></td>
+          <td><%= _embedded.jefeHogar.id %>-<%= entregarDigitoVerificador(_embedded.jefeHogar.id) %></td>
+          <td><%= _embedded.jefeHogar._label %></td>
+          <td class='TDcondicion_hogar'><%= (existeHogarAsociado)? rolHogarAsociado:'<input type="text" class="form-control input-sm persona_rol" value="" style="display:none;">' %></td>
+    </script>
+
+    <!-- ------------------------------- -->
+    <!-- ----------CONSULTA------------	 -->
+    <!-- ------------------------------- -->
+
+
+	<!-- ConsultaMainView -->
+	<script type="text/template" id="template_ConsultaMainView"> 
+	
+		<div class="row">
+			<div class="consulta busqueda well col-lg-12 col-md-12 col-xs-12"></div>
+			<div class="consulta info_general well col-lg-12 col-md-12 col-xs-12" style="font-size: 16px; font-weight:normal;"></div>
+			<div class="consulta ficha well col-lg-12 col-md-12 col-xs-12" style="font-size: 16px; font-weight:normal;"></div>
+	   </div>
+	</script>
+
+	
+
+	<!-- Consulta - Busqueda -->
+	<script type="text/template" id="template_ConsultaBusquedaView"> 
+		<div class="form-group row">
+		  	<div class="col-lg-6 col-md-6 col-xs-6">
+		  		<form class="form-horizontal" role="form">
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-3 col-md-3 col-xs-3 control-label text-right" style="font-size: 16px;">RUT:</label>
+					  	<div class="col-lg-9 col-md-9 col-xs-9">
+					  		<div class="input-group">
+				              	<input type="number" class="form-control input-lg rut" placeholder="Ingrese RUT" value="<%= rut_digito %>">
+				              	<span class="btn btn-lg input-group-addon input-large">Buscar</span>
+				            </div>
+					  	</div>
+					  	
+				  	</div>
+
+				</form>
+
+
+		  	</div>
+		  	<div class="col-lg-6 col-md-6 col-xs-6">
+			  	<label class="pull-right">
+		  			<span style="font-size: 28px; font-weight:normal;">CONSULTA FICHA BENEFICIARIO</span>
+		 	 	</label>
+		  	</div>
+
+	  
+		  	
+		</div>	
+	</script>
+
+	<!-- Consulta - InfoGeneral -->
+	<script type="text/template" id="template_ConsultaInfoGeneralView"> 
+		<div class="row">	
+			<div class="col-lg-3 col-md-3 col-xs-3">
+				<form class="form-horizontal" role="form">
+				  	<div class="form-group">
+					  	<label  class="col-lg-5 col-md-5 col-xs-5 control-label text-right">TIPO:</label>
+					  	<div class="col-lg-7 col-md-7 col-xs-7">
+					  		<input type="text" class="form-control input-sm"  value="<%= _embedded.tipoPersona._label %>"  disabled>
+					  	</div>
+				  	</div>
+            <div class="form-group datos_pj">
+              <label  class="col-lg-5 col-md-5 col-xs-5 control-label text-right">N° PJ:</label>
+              <div class="col-lg-7 col-md-7 col-xs-7">
+                <input type="text" class="form-control input-sm" value="<%= n_pj %>" disabled>
+              </div>
+            </div>
+				</form>
+
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4">
+			  
+				<form class="form-horizontal" role="form">
+				  	<div class="form-group">
+					  	<label  class="col-lg-5 col-md-5 col-xs-5 control-label text-right">NOMBRES:</label>
+					  	<div class="col-lg-7 col-md-7 col-xs-7">
+					  		<input type="text" class="form-control input-sm"  value="<%= nombre %>" disabled>
+					  	</div>
+				  	</div>
+				  	<div class="form-group">
+					  	<label  class="col-lg-5 col-md-5 col-xs-5 control-label text-right">RUT:</label>
+					  	<div class="col-lg-7 col-md-7 col-xs-7">
+					  		<input type="text" class="form-control input-sm"  value="<%= rut_digito %>" disabled>
+					  	</div>
+				  	</div>
+				</form>
+
+
+			</div>
+
+			<div class="col-lg-4 col-md-4 col-xs-4 apellidos">
+
+				<form class="form-horizontal" role="form">
+				  	<div class="form-group">
+					  	<label  class="col-lg-6 col-md-6 col-xs-6 control-label text-right">AP. PATERNO:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= apellido_paterno %>" disabled>
+					  	</div>
+				  	</div>
+				  	<div class="form-group">
+					  	<label  class="col-lg-6 col-md-6 col-xs-6 control-label text-right">AP. MATERNO:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= apellido_materno %>" disabled>
+					  	</div>
+				  	</div>
+				</form>
+
+
+			</div>	
+
+      <div class="col-lg-4 col-md-4 col-xs-4 datos_pj" >
+
+        <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <label  class="col-lg-6 col-md-6 col-xs-6 control-label text-right">TIPO PJ:</label>
+              <div class="col-lg-6 col-md-6 col-xs-6">
+                <input type="text" class="form-control input-sm"  value="<%= _embedded.tipoOrganizacion._label %>" disabled>
+              </div>
+            </div>
+            <div class="form-group">
+              <label  class="col-lg-6 col-md-6 col-xs-6 control-label text-right">ORIGEN PJ:</label>
+              <div class="col-lg-6 col-md-6 col-xs-6">
+                <input type="text" class="form-control input-sm"  value="<%= origen_pj %>" disabled>
+              </div>
+            </div>
+        </form>
+
+
+      </div>  
+
+		</div> 
+	</script>
+
+	<!-- Consulta - Ficha -->
+	<script type="text/template" id="template_ConsultaFichaView"> 
+		
+					
+		<ul class="nav nav-tabs" id="myTab">
+		  	<li class="tab localizacion active"><a href="#localizacion" data-toggle="tab">Localización</a></li>
+		  	<li class="tab datos_personales"><a href="#datos_personales" data-toggle="tab">Datos Personales</a></li>
+		  	<li class="tab servicios_solicitados"><a href="#servicios_solicitados" data-toggle="tab">Servicios Solicitados</a></li>
+		  	<li class="tab grupo_hogar"><a href="#grupo_hogar" data-toggle="tab">Grupo Hogar</a></li>
+		  	<li class="tab organizaciones"><a href="#organizaciones" data-toggle="tab">Organizaciones</a></li>
+		  	<li class="tab miembros"><a href="#miembros" data-toggle="tab">Miembros</a></li>
+		</ul>
+
+		<div class="tab-content">
+
+			<div class="tab-pane well consulta info localizacion active" id="localizacion"></div>
+			<div class="tab-pane well consulta info datos_personales" id="datos_personales"></div>
+			<div class="tab-pane well consulta info servicios_solicitados" id="servicios_solicitados"></div>
+			<div class="tab-pane well consulta info grupo_hogar" id="grupo_hogar"></div>
+			<div class="tab-pane well consulta info organizaciones" id="organizaciones"></div>
+			<div class="tab-pane well consulta info miembros" id="miembros"></div>
+		</div>
+			
+	</script>
+
+
+	<!-- Consulta - Localizacion -->
+	<script type="text/template" id="template_ConsultaLocalizacionView"> 
+		
+					
+		<div class="row">
+			<div class="col-lg-6 col-md-6 col-xs-6">
+			  	<form class="form-horizontal" role="form">
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">DIRECCION:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= direccion %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">COMUNA:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= _embedded.comuna._label %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">SECTOR:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= _embedded.sectorGeografico._label %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">LOCALIDAD:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= _embedded.localidad._label %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">COMUNIDAD:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= _embedded.comunidad._label %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">FONO FIJO:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= fono_fijo %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">FONO CELULAR:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= fono_celular %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">E-MAIL:</label>
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<input type="text" class="form-control input-sm"  value="<%= email %>" disabled>
+					  	</div>
+				  	</div>
+
+            <div class="form-group">
+              <label  class="col-lg-4 col-md-4 col-xs-4 control-label">REFERENCIA:</label>
+              <div class="col-lg-8 col-md-8 col-xs-8">
+                <textarea rows="1" class="form-control" disabled></textarea>
+              </div>
+            </div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">COORDENADAS:</label>
+
+					  	<div class="col-lg-8 col-md-8 col-xs-8">
+					  		<form class="form-horizontal" role="form">
+					  			<div class="form-group">
+					  				<div class="input-group col-lg-6 col-md-6 col-xs-6">
+							  			<input type="text" class="form-control input-sm" placeholder="" value="<%= latitud %>" disabled>
+									  	<span class="input-group-addon btn-sm">X</span>
+									  </div>
+  									<div class="input-group col-lg-6 col-md-6 col-xs-6">
+  							  			<input type="text" class="form-control input-sm" value="<%= longitud %>" disabled>
+  									  	<span class="input-group-addon">Y</span>
+  									</div>	
+					  			</div>
+					  		</form>
+
+					  	</div>
+				  	</div>
+
+
+            
+
+				</form>  
+
+			</div>
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				
+				    <div id='map_canvas' style="width:340px; height:350px;"></div>
+				
+			</div>
+		</div>
+			
+	</script>
+
+
+	<!-- Consulta - Datos personales -->
+	<script type="text/template" id="template_ConsultaDatosPersonalesView"> 
+		
+					
+		<div class="form-inline row">
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				<form class="form-horizontal" role="form">
+				  	<div class="form-group">
+					  	<label  class="col-lg-6 col-md-6 col-xs-6 control-label">N° EXPEDIENTE:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= numero_expediente %>" disabled>
+					  	</div>
+				  	</div>
+				</form>
+				
+			</div>
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				<form class="form-horizontal" role="form">
+				  	<div class="form-group">
+					  	<label  class="col-lg-6 col-md-6 col-xs-6 control-label">FICHA SOCIAL:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= ficha_proteccion_social %>" disabled>
+					  	</div>
+				  	</div>
+				</form>
+
+			</div>
+		</div>
+
+		<hr size="3"  />
+
+
+		<div class="row">
+
+			<div class="col-lg-6 col-md-6 col-xs-6">
+
+				<form class="form-horizontal" role="form">
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">FECHA NAC.:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+				            <input type="text" class="form-control date input-sm" value="<%= fecha_nacimiento %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">ESTADO CIVIL:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= tipo_estado_civil_cod %>" disabled>
+					  	</div>
+				  	</div>
+
+					<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">SIST. SALUD:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= tipo_prevision_cod %>" disabled>
+					  	</div>
+				  	</div>
+					
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">ESCOLARIDAD:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= _embedded.escolaridad._label %>" disabled>
+					  	</div>
+				  	</div>
+
+				  	<div class="form-group">
+					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">ACTIVIDAD:</label>
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+					  		<input type="text" class="form-control input-sm"  value="<%= _embedded.actividadLaboral._label %>" disabled>
+					  	</div>
+				  	</div>
+
+
+				</form>
+
+			</div>
+
+			<div class="col-lg-5 col-md-5 col-xs-5">
+				<div class="row">
+					<label class="col-lg-12 col-md-12 col-xs-12">PROGRAMAS SOCIALES:</label>
+					<textarea rows="5" class="col-lg-12 col-md-12 col-xs-12 form-control" disabled><%= programas_sociales %></textarea>
+				</div>
+			</div>
+
+		</div>	
+
+			
+	</script>
+
+
+	<!-- Consulta - Servicios Solicitados -->
+	<script type="text/template" id="template_ConsultaServiciosSolicitadosView"> 
+
+		<label class=""><%= cantidadRegistros %> solicitudes encontradas</label>
+			<table class="table table-striped solicitudes" style="font-size: 16px;">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha Solicitud</th>
+                  <th>RUT</th>
+                  <th>Servicio</th>
+                  <th>Subtipo</th>
+                  <th>Estado</th>
+                  <th>Fecha de Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+            <div class="col-md-offset-4 col-lg-4 col-md-4 col-xs-4">
+              <ul class="pagination">
+                <li><a class="paginacion">&laquo;</a></li>
+                <li><a class="paginacion numero">1</a></li>
+                <li><a class="paginacion numero">2</a></li>
+                <li><a class="paginacion numero">3</a></li>
+                <li><a class="paginacion numero">4</a></li>
+                <li><a class="paginacion numero">5</a></li>
+                <li><a class="paginacion">&raquo;</a></li>
+              </ul>
+            </div>
+
+			
+	</script>
+
+	<!-- Consulta - Solicitudes - Item-->
+	<script type="text/template" id="template_ConsultaServiciosSolicitadosItemView"> 
+		<td><%- id %></td>
+		<td><%- version_date %></td>
+		<td style="width: 110px;"><%- rut %></td>
+		<td><%- _embedded.servicio._label %></td>
+		<td><%- _embedded.subtipo._label %></td>
+		<td style="width: 100px;"><%- _embedded.estado._label %></td>
+    <td><%- fecha_estado_actual %></td>
+    <td><button class="btn btn-default boton detalle"><span class="glyphicon glyphicon-search"></span></button></td>
+	</script>
+
+
+	<!-- Consulta - Grupo Hogar -->
+	<script type="text/template" id="template_ConsultaGrupoHogarView"> 
+		<div class="accordion hogares" id="accordion2">
+		  
+		</div>
+		
+	</script>
+
+		<!-- Consulta - Grupo Hogar -->
+	<script type="text/template" id="template_ConsultaGrupoHogarItemView"> 
+		
+	  <div class="accordion-group">
+	    <div class="accordion-heading">
+	      <button type="button" class="accordion-toggle btn btn-default btn-sm" data-toggle="collapse" data-parent="#accordion2" href="#collapse<%= _id %>">
+	        HOGAR-<%= _id %>: <%= cantmiembros %> personas encontradas
+	      </button >
+	    </div>
+	    <div id="collapse<%= _id %>" class="accordion-body collapse in">
+	      <div class="accordion-inner">
+		        <table class="table table-striped miembros" style="font-size: 16px;">
+	              <thead>
+	                <tr>
+	                  <th>RUT</th>
+	                  <th>Nombre</th>
+	                  <th>Rol/Relación con Jefe de Hogar</th>
+	                </tr>
+	              </thead>
+	              <tbody>
+	                
+	              </tbody>
+	            </table>
+	      </div>
+	    </div>
+	  </div>
+
+		
+	</script>
+
+			<!-- Consulta - Grupo Hogar -->
+	<script type="text/template" id="template_ConsultaGrupoHogarMiembrosItemView"> 
+		
+	    <td><a onclick="location.href='index.html#consulta/persona/<%= persona_rut %>'"><%= rut %></a></td>
+	    <td><%= _embedded.persona._label %></td>
+	    <td><%= condicion_en_hogar %></td>
+
+		
+	</script>
+
+
+	<!-- Consulta - Organizaciones -->
+	<script type="text/template" id="template_ConsultaOrganizacionesView"> 
+
+		<label class=""><%= length %> organizaciones asociadas</label>
+		<table class="table table-striped organizaciones" style="font-size: 16px;">
+          <thead>
+            <tr>
+              <th>RUT</th>
+              <th>Organización</th>
+              <th>Relación/Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+			
+	</script>
+
+
+	<!-- Consulta - Organizaciones - Item-->
+	<script type="text/template" id="template_ConsultaOrganizacionesItemView"> 
+      <td><a onclick="location.href='index.html#consulta/persona/<%= persona_juridica_rut %>'"><%= rut %></a></td>
+      <td><%= _embedded.organizacion._label %></td>
+      <td><%= _embedded.rol._label %></td>
+	</script>
+
+		<!-- Consulta - Miembros -->
+	<script type="text/template" id="template_ConsultaMiembrosView"> 
+
+		<label class=""><%= length %> miembros encontrados</label>
+		<table class="table table-striped miembros" style="font-size: 16px;">
+      <thead>
+        <tr>
+          <th>Rut</th>
+          <th>Nombre</th>
+          <th>Rol/Relación</th>
+          <!--<th>Acciones</th>-->
+        </tr>
+      </thead>
+      <tbody>
+
+      </tbody>
+    </table>
+
+	</script>
+
+
+	<!-- Consulta - Miembros - Item-->
+	<script type="text/template" id="template_ConsultaMiembrosItemView"> 
+      <td><a onclick="location.href='index.html#consulta/persona/<%= persona_natural_rut %>'"><%= rut %></a></td>
+      <td><%= _embedded.miembro._label %></td>
+      <td><%= _embedded.rol._label %></td>
+      <!--<td><a onclick="location.href='index.html#consulta/persona/<%= persona_natural_rut %>'"><i class="glyphicon glyphicon-search"></i></a></td>-->
+	</script>
+
+
+  <!-- Consulta - ConsultaDetalleSolicitudView -->
+  <script type="text/template" id="template_ConsultaDetalleSolicitudView"> 
+    
+    
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">DETALLE - SOLICITUD</h4> 
+          </div>
+          <div class="modal-body" style="font-size: 10px;">
+          <div class="col-lg-12 col-md-12 col-xs-12 seccion_modal estado">
+              <div class="well">
+              
+                    <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                        <label  class="col-lg-2 col-md-2 col-xs-2 control-label">N° Solicitud:</label>
+                        <label  class="col-lg-1 col-md-1 col-xs-1 control-label"><%= id %><input class="idSolicitud" type="hidden" value="<%= id %>"></label>
+
+                      <label  class="col-md-offset-2 col-lg-offset-2 col-lg-1 col-md-1 col-xs-3 control-label text-right">Versión</label>
+                      <div class="input-group version_solicitud col-lg-6 col-md-6 col-xs-6">
+                          <input type="text" class="form-control input-sm" value="V<%= version %>, <%= version_date %>, <%= version_by %>" disabled>
+                      </div>  
+                    </div>
+                  </form>
+                
+
+                
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-md-offset-4 col-lg-offset-4 col-lg-2 col-md-2 col-xs-6 control-label text-right">Estado:</label>
+                      <div class="input-group col-lg-3 col-md-3 col-xs-3">
+                          <input type="text" class="form-control input-sm" value="<%= _embedded.estado._label %>" disabled>
+                      </div>  
+                      
+                      <div class=" input-group col-lg-3 col-md-3 col-xs-3">
+                            <input type="text" class="form-control input-sm date fecha_estado" data-date-format="dd-mm-yyy" data-date-language="es" value="<%= fecha_estado_actual %>" disabled>
+                      </div>
+                      
+                      </div>
+                    </form>
+                  
+                
+
+
+                
+              </div>
+            </div>
+            <div class="row">
+
+              
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal beneficiario">
+                
+                <div class="well">
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-3 col-md-3 col-xs-3 control-label">RUT:</label>
+                      <div class="input-group col-lg-4 col-md-4 col-xs-4">
+                        <input type="text" class="form-control input-sm col-lg-4 col-md-4 col-xs-4 persona_rut" value="<%= rut %>" disabled>
+                    </div>
+
+                    </div>
+                  </form>
+                
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-3 col-md-3 col-xs-3 control-label">NOMBRES:</label>
+                      <div class="input-group col-lg-8 col-md-8 col-xs-8">
+                        <input type="text" class="form-control input-sm col-lg-4 col-md-4 col-xs-4 nombres" value="<%= _embedded.persona._label %>" disabled>
+                    </div>  
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal servicio">
+                
+                <div class="well">
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">SERVICIO:</label>
+                      <div class="input-group col-lg-8 col-md-8 col-xs-8">
+                          <input type="text" class="form-control input-sm" value="<%= _embedded.servicio._label %>" disabled>
+                      </div>  
+                    </div>
+                  </form>
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">SUBTIPO:</label>
+                      <div class="input-group col-lg-8 col-md-8 col-xs-8">
+                          <input type="text" class="form-control input-sm" value="<%= _embedded.subtipo._label %>" disabled>
+                      </div>  
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-lg-6 col-md-6 col-xs-6">
+                <div class="seccion_modal detalle_publico">
+                  <div class="well">
+                    <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                        <label  class="control-label">DETALLES (<label class="text-color-blue">Información Pública</label>)</label>
+                      <textarea rows="4" class="col-lg-12 col-md-12 col-xs-12 form-control input-sm detalle_publico" disabled><%= detalle_publico %></textarea>
+                      </div>
+                    </form>
+                    <form class="form-horizontal" role="form">
+                      <label>HISTORIAL DE ESTADOS</label>
+                      <div class="well form-group historial_estados" style="height:108px; overflow-y: scroll;">
+
+                      </div>
+                    </form>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal monto_solicitud">
+
+                <div class="well">
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-6 col-md-6 col-xs-6 control-label">COSTO SUBSIDIO (en $):</label>
+                    <div class="input-group col-lg-6 col-md-6 col-xs-6">
+                        <input type="text" class="form-control input-sm monto_solicitud" value="<%= monto_solicitud %>" placeholder="50000" disabled>
+                    </div>  
+                    </div>
+                  </form>
+
+
+                  <form class="form-horizontal" role="form">
+                    
+                    <div class="form-group">
+                      <label  class="col-lg-3 col-md-3 col-xs-3 control-label">REFERENCIA:</label>
+                    <div class="input-group col-lg-9 col-md-9 col-xs-9">
+                        <input type="text" class="form-control input-sm referencia_solicitud" value="<%= referencia_solicitud %>" disabled>
+                    </div>  
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal documentos_adjuntos">
+                <div class="well">
+                  
+                <iframe src="<%= baseurl %>/documentoSolicitud/<%= id %>" width="100%" height=170 style="border:none;"></iframe>
+
+                </div>
+              </div>
+
+
+
+            </div>
+            
+
+            <div class="row">
+
+
+
+            </div> 
+
+    
+          </div>
+          <div class="modal-footer">
+            <a class='btn btn-default cancel' data-dismiss="modal" >Cerrar</a>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    
+
+  </script>
+
+
+  <!-- Consulta - Historial de Estados -->
+  <script type="text/template" id="template_ConsultaHistorialEstadosSolicitudView"> 
+
+      <table class="table table-striped historial_estados" style="font-size: 10px;">
+        <thead>
+          <tr>
+            <th>FECHA</th>
+            <th>ESTADO</th>
+          </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+      </table>
+      
+  </script>
+
+    <!-- Consulta - Historial de Estados - Item-->
+  <script type="text/template" id="template_ConsultaHistorialEstadosSolicitudItemView"> 
+      
+      <td><%= fecha %></td>
+      <td><%= _embedded.estado._label %></td>
+      
+  </script>
+
+
+    <!-- ------------------------------- -->
+    <!-- ----------SOLICITUDES----------	 -->
+    <!-- ------------------------------- -->
+
+
+    <!-- SolicitudesMainView -->
+	<script type="text/template" id="template_SolicitudesMainView"> 
+		
+		<div class="row">
+			<div class="well">
+				<div class="well filtro">
+					
+				</div>
+
+				<div class="col-lg-12 col-md-12 col-xs-12 servicios_solicitados">
+
+				</div>
+			</div>
+		</div>	
+
+	</script>
+
+
+	<!-- SolicitudesFiltroView -->
+	<script type="text/template" id="template_SolicitudesFiltroView"> 
+		
+		<div class="col-lg-12 col-md-12 col-xs-12 titulo servicio">
+			
+			<H3></H3>
+
+
+		</div>	
+
+		<form class="form-horizontal" role="form">
+		  	<div class="form-group" style="font-size: 14px;">
+			  	
+			  	<label  class="col-lg-1 col-md-1 col-xs-1 control-label text-right">RUT:</label>
+			  	<div class="col-lg-2 col-md-2 col-xs-2">
+			  		<input type="text" class="form-control input-md filtro rut"  value="">
+			  	</div>
+			  	<label  class="col-lg-2 col-md-2 col-xs-2 control-label text-right">FECHA:</label>
+			  	<div class="col-lg-4 col-md-4 col-xs-4">
+					<form class="form-horizontal" role="form">
+			  			<div class="form-group">
+			  				<div class="input-group input-group-md col-lg-5 col-md-5 col-xs-5">
+					  			<input type="text" data-date-format="dd-mm-yyyy" data-date-language="es" class="form-control input-md filtro fecha_desde" value="">
+							</div>
+							<label  class="col-lg-1 col-md-1 col-xs-1 control-label">AL</label>
+							<div class="input-group col-lg-5 col-md-5 col-xs-5">
+					  			<input type="text" data-date-format="dd-mm-yyyy" data-date-language="es" class="form-control input-md filtro fecha_hasta" value="">
+							</div>	
+
+			  			</div>
+			  		</form>
+			  	</div>
+				<div class="col-lg-3 col-md-3 col-xs-3">	
+					<label  class="col-lg-4 col-md-4 col-xs-4 control-label text-right">ESTADO:</label>	  	
+			  		<div class="col-lg-8 col-md-8 col-xs-8 filtro estado_solicitud"></div>
+			  	</div>	
+			  	
+		  	</div>
+
+		</form>
+
+	</script>
+
+
+	<!-- SolicitudesServiciosSolicitadosListView -->
+	<script type="text/template" id="template_SolicitudesServiciosSolicitadosListView"> 
+		
+		<label class="control-label">Se encontraron <%= cantidadRegistros %> solicitudes</label>
+		<table class="table table-striped solicitudes" style="font-size: 16px;">
+          <thead>
+            <tr>
+              <th>ID Sol.</th>
+              <th>Fecha Solicitud</th>
+              <th>RUT</th>
+              <th>Sector</th>
+              <th>Subtipo</th>
+              <th>Estado</th>
+              <th>Fecha de Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+           
+          </tbody>
+        </table>
+        
+        <div class="row">
+
+          <div class="col-lg-4 col-md-4 col-xs-4">
+      
+            
+            <!--<button id="urlExcel" class="btn btn-default" ><span>Exportar resultados a Excel <i class="glyphicon glyphicon-download-alt"></i></span></button>-->
+
+
+
+          </div>
+
+	        <div class="col-lg-4 col-md-4 col-xs-4">
+		        <ul class="pagination">
+    				  <li><a class="paginacion">&laquo;</a></li>
+    				  <li><a class="paginacion numero">1</a></li>
+    				  <li><a class="paginacion numero">2</a></li>
+    				  <li><a class="paginacion numero">3</a></li>
+    				  <li><a class="paginacion numero">4</a></li>
+    				  <li><a class="paginacion numero">5</a></li>
+    				  <li><a class="paginacion">&raquo;</a></li>
+    				</ul>
+    			</div>
+			<div class="col-lg-4 col-md-4 col-xs-4">
+				<a class='btn btn-default btn-md pull-right nueva_solicitud'>Nueva Solicitud</a>
+			</div>
+		</div>
+
+	</script>
+
+
+		<!-- SolicitudesServiciosSolicitadosListView -->
+	<script type="text/template" id="template_SolicitudesServiciosSolicitadosItemView"> 
+		
+		  <td><%= id %></td>
+		  <td><%= fecha %></td>
+		  <td style="width: 100px;"><a onclick="location.href='index.html#consulta/persona/<%= persona_rut %>'"><%= rut %></a></td>
+		  <td><%= sectorGeografico %></td>
+		  <td><%= _embedded.subtipo._label %></td>
+		  <td style="width: 100px;"><%= _embedded.estado._label %></td>
+		  <td><%= fecha_estado_actual %></td>
+		  <td>
+        <button class="btn btn-default boton detalle"><span class="glyphicon glyphicon-search"></span></button>
+		  	<button class="btn btn-default boton edicion"><span class="glyphicon glyphicon-pencil"></span></button>
+		 	  <!--<span class="glyphicon glyphicon-remove boton eliminar"></span>-->
+		  </td>
+
+	</script>
+
+	
+
+	<!-- SolicitudesNuevaSolicitudView -->
+	<script type="text/template" id="template_SolicitudesNuevaSolicitudView"> 
+		
+		
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">CREAR/EDITAR - SOLICITUD</h4>	
+		      </div>
+		      <div class="modal-body" style="font-size: 10px;">
+					<div class="col-lg-12 col-md-12 col-xs-12 seccion_modal estado">
+				  		<div class="well">
+							
+			  				<form class="form-horizontal" role="form">
+			  					<div class="form-group">
+						  			<label  class="col-lg-2 col-md-2 col-xs-2 control-label">N° Solicitud:</label>
+						  			<label  class="col-lg-1 col-md-1 col-xs-1 control-label"><%= id %><input class="idSolicitud" type="hidden" value="<%= id %>"></label>
+
+									  <label  class="col-xs-offset-2 col-md-offset-2 col-lg-offset-2 col-xs-3 col-lg-1 col-md-1 control-label text-right">Versión</label>
+										<div class="input-group input-group-sm col-lg-6 col-md-6 col-xs-6">
+								  			<input type="text" class="form-control input-sm" value="V<%= version %>, <%= version_date %>, <%= version_by %>" disabled>
+										</div>	
+									</div>
+							  </form>
+								
+
+								
+								<form class="form-horizontal" role="form">
+									<div class="form-group">
+										<label  class="col-md-offset-4 col-lg-offset-4 col-xs-offset-4 col-lg-2 col-md-2 col-xs-6 control-label text-right">Estado:</label>
+						  			<div class="col-lg-3 col-md-3 col-xs-3 form-group estado_solicitud"></div>
+							  		<div class="col-lg-3 col-md-3 col-xs-3 form-group">
+								  		<div class=" input-group">
+					              	<input type="text" class="form-control input-sm date fecha_estado" data-date-format="dd-mm-yyy" data-date-language="es" value="<%= fecha_estado_actual %>">
+					              	<span class="btn btn-default input-group-addon calendar" ><i class="glyphicon glyphicon-calendar"></i></span>
+					            </div>
+								  	</div>
+							  	</div>
+						  	</form>
+							  	
+						  	
+
+
+				  			
+			  			</div>
+			  		</div>
+			  		<div class="row">
+
+					  	
+			  			<div class="col-lg-6 col-md-6 col-xs-6 seccion_modal beneficiario">
+			  				
+					  		<div class="well">
+						  		<form class="form-horizontal" role="form">
+						  			<div class="form-group">
+						  				<label  class="col-lg-3 col-md-3 col-xs-3 control-label">RUT:</label>
+						  				<div class="input-group input-group-sm col-lg-8 col-md-8 col-xs-8">
+								  			<input type="text" class="form-control input-sm persona_rut" value="<%= rut %>">
+								  			<span class="input-group-addon" style="padding: 0;">								  			    
+								  			    <button class="btn button_persona_rut" type="button"><i class="glyphicon glyphicon-search"></i></button>								  			      
+								  			</span>								  											  			
+										</div>
+
+						  			</div>
+						  		</form>
+					  		
+
+						  		<form class="form-horizontal" role="form">
+						  			<div class="form-group">
+						  				<label  class="col-lg-3 col-md-3 col-xs-3 control-label">NOMBRES:</label>
+						  				<div class="input-group col-lg-8 col-md-8 col-xs-8">
+								  			<input type="text" class="form-control input-sm col-lg-4 col-md-4 col-xs-4 nombres" value="<%= _embedded.persona._label %>" disabled>
+										</div>	
+						  			</div>
+						  		</form>
+					  		</div>
+			  			</div>
+
+			  			<div class="col-lg-6 col-md-6 col-xs-6 seccion_modal servicio">
+			  				
+					  		<div class="well">
+				  				<form class="form-horizontal" role="form">
+						  			<div class="form-group">
+						  				<label  class="col-lg-4 col-md-4 col-xs-4 control-label">SERVICIO:</label>
+										<div class="input-group col-lg-8 col-md-8 col-xs-8">
+								  			<input type="text" class="form-control input-sm" value="<%= _embedded.servicio._label %>" disabled>
+										</div>	
+						  			</div>
+						  		</form>
+
+						  		<form class="form-horizontal" role="form">
+						  			<div class="form-group">
+							  			<label  class="col-lg-4 col-md-4 col-xs-4 control-label">SUBTIPO:</label>
+							  			<div class="col-lg-8 col-md-8 col-xs-8 form-group subtipo_servicio"></div>
+						  			</div>
+						  		</form>
+					  		</div>
+			  			</div>
+
+			  		</div>
+
+
+			  		<div class="row">
+
+					  	<div class="col-lg-6 col-md-6 col-xs-6">
+				  			<div class="seccion_modal detalle_publico">
+						  		<div class="well">
+							  		<form class="form-horizontal" role="form">
+							  			<div class="form-group">
+							  				<label  class="control-label">DETALLES (<label class="text-color-blue">Información Pública</label>)</label>
+											<textarea rows="4" class="col-lg-12 col-md-12 col-xs-12 form-control input-sm detalle_publico"><%= detalle_publico %></textarea>
+							  			</div>
+							  		</form>
+							  		<form class="form-horizontal" role="form">
+							  			<div class="form-group">
+							  				<label  class="control-label">DETALLES (<label class="text-color-red">Información Confidencial</label>)</label>
+											<textarea rows="3" class="col-lg-6 col-md-6 col-xs-6 form-control input-sm detalle_privado"><%= detalle_privado %></textarea>	
+							  			</div>
+							  		</form>
+
+						  		</div>
+				  			</div>
+
+			  			</div>
+
+			  			<div class="col-lg-6 col-md-6 col-xs-6 seccion_modal monto_solicitud">
+
+					  		<div class="well">
+				  				<form class="form-horizontal" role="form">
+						  			<div class="form-group">
+						  				<label  class="col-lg-6 col-md-6 col-xs-6 control-label" style="font-size: 10px;">COSTO SUBSIDIO (en $):</label>
+										<div class="input-group col-lg-6 col-md-6 col-xs-6">
+								  			<input type="text" class="form-control input-sm monto_solicitud" value="<%= monto_solicitud %>" placeholder="50000">
+										</div>	
+						  			</div>
+						  		</form>
+
+
+						  		<form class="form-horizontal" role="form">
+						  			
+						  			<div class="form-group">
+						  				<label  class="col-lg-3 col-md-3 col-xs-3 control-label">REFERENCIA:</label>
+										<div class="input-group col-lg-9 col-md-9 col-xs-9">
+								  			<input type="text" class="form-control input-sm referencia_solicitud" value="<%= referencia_solicitud %>" >
+										</div>	
+
+						  			</div>
+						  		</form>
+					  		</div>
+			  			</div>
+
+			  			<div class="col-lg-6 col-md-6 col-xs-6 seccion_modal documentos_adjuntos">
+					  		<div class="well">
+				  				
+					  		<iframe src= "<%= baseurl %>/documentoSolicitud/update/<%= id %>" width="100%" height=135 style="border:none;"></iframe>
+
+					  		</div>
+			  			</div>
+
+
+
+			  		</div>
+			  		
+
+			  		<div class="row">
+
+
+
+			  		</div> 
+
+		
+		      </div>
+		      <div class="modal-footer">
+		      	<a class='btn btn-default cancel' data-dismiss="modal" >Cerrar</a>
+		      	<a class='btn btn-primary save' >Guardar</a>
+		      </div>
+		    </div><!-- /.modal-content -->
+		  </div><!-- /.modal-dialog -->
+		
+
+	</script>
+
+
+
+  <!-- SolicitudesDetalleSolicitudView -->
+  <script type="text/template" id="template_SolicitudesDetalleSolicitudView"> 
+    
+    
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">DETALLE - SOLICITUD</h4> 
+          </div>
+          <div class="modal-body" style="font-size: 10px;">
+          <div class="col-lg-12 col-md-12 col-xs-12 seccion_modal estado">
+              <div class="well">
+              
+                    <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                        <label  class="col-lg-2 col-md-2 col-xs-2 control-label">N° Solicitud:</label>
+                        <label  class="col-lg-1 col-md-1 col-xs-1 control-label"><%= id %><input class="idSolicitud" type="hidden" value="<%= id %>"></label>
+
+                      <label  class="col-md-offset-2 col-lg-offset-2 col-xs-offset-2 col-lg-1 col-md-1 col-xs-3 control-label text-right">Versión</label>
+                      <div class="input-group version_solicitud col-lg-6 col-md-6 col-xs-6">
+                          <input type="text" class="form-control input-sm" value="V<%= version %>, <%= version_date %>, <%= version_by %>" disabled>
+                      </div>  
+                    </div>
+                  </form>
+                
+
+                
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-md-offset-4 col-lg-offset-4 col-xs-offset-4 col-lg-2 col-md-2 col-xs-6 control-label text-right">Estado:</label>
+                      <div class="input-group col-lg-3 col-md-3 col-xs-3">
+                          <input type="text" class="form-control input-sm" value="<%= _embedded.estado._label %>" disabled>
+                      </div>  
+                      
+                      <div class=" input-group col-lg-3 col-md-3 col-xs-3">
+                            <input type="text" class="form-control input-sm date fecha_estado" data-date-format="dd-mm-yyy" data-date-language="es" value="<%= fecha_estado_actual %>" disabled>
+                      </div>
+                      
+                      </div>
+                    </form>
+                  
+                
+
+
+                
+              </div>
+            </div>
+            <div class="row">
+
+              
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal beneficiario">
+                
+                <div class="well">
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-3 col-md-3 col-xs-3 control-label">RUT:</label>
+                      <div class="input-group col-lg-4 col-md-4 col-xs-4">
+                        <input type="text" class="form-control input-sm col-lg-4 col-md-4 col-xs-4 persona_rut" value="<%= rut %>" disabled>
+                    </div>
+
+                    </div>
+                  </form>
+                
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-3 col-md-3 col-xs-3 control-label">NOMBRES:</label>
+                      <div class="input-group col-lg-8 col-md-8 col-xs-8">
+                        <input type="text" class="form-control input-sm col-lg-4 col-md-4 col-xs-4 nombres" value="<%= _embedded.persona._label %>" disabled>
+                    </div>  
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal servicio">
+                
+                <div class="well">
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">SERVICIO:</label>
+                      <div class="input-group col-lg-8 col-md-8 col-xs-8">
+                          <input type="text" class="form-control input-sm" value="<%= _embedded.servicio._label %>" disabled>
+                      </div>  
+                    </div>
+                  </form>
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">SUBTIPO:</label>
+                      <div class="input-group col-lg-8 col-md-8 col-xs-8">
+                          <input type="text" class="form-control input-sm" value="<%= _embedded.subtipo._label %>" disabled>
+                      </div>  
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-lg-6 col-md-6 col-xs-6">
+                <div class="seccion_modal detalle_publico">
+                  <div class="well">
+                    <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                        <label  class="control-label">DETALLES (<label class="text-color-blue">Información Pública</label>)</label>
+                      <textarea rows="4" class="col-lg-12 col-md-12 col-xs-12 form-control input-sm detalle_publico" disabled><%= detalle_publico %></textarea>
+                      </div>
+                    </form>
+                    <form class="form-horizontal" role="form">
+                      <div class="form-group">
+                        <label  class="control-label">DETALLES (<label class="text-color-red">Información Confidencial</label>)</label>
+                      <textarea rows="3" class="col-lg-6 col-md-6 col-xs-6 form-control input-sm detalle_privado" disabled><%= detalle_privado %></textarea>  
+                      </div>
+                    </form>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal monto_solicitud">
+
+                <div class="well">
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label  class="col-lg-6 col-md-6 col-xs-6 control-label">COSTO SUBSIDIO (en $):</label>
+                    <div class="input-group col-lg-6 col-md-6 col-xs-6">
+                        <input type="text" class="form-control input-sm monto_solicitud" value="<%= monto_solicitud %>" placeholder="50000" disabled>
+                    </div>  
+                    </div>
+                  </form>
+
+
+                  <form class="form-horizontal" role="form">
+                    
+                    <div class="form-group">
+                      <label  class="col-lg-3 col-md-3 col-xs-3 control-label">REFERENCIA:</label>
+                    <div class="input-group col-lg-9 col-md-9 col-xs-9">
+                        <input type="text" class="form-control input-sm referencia_solicitud" value="<%= referencia_solicitud %>" disabled>
+                    </div>  
+
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="col-lg-6 col-md-6 col-xs-6 seccion_modal documentos_adjuntos">
+                <div class="well">
+                  
+                <iframe src= "<%= baseurl %>/documentoSolicitud/<%= id %>" width="100%" height=135 style="border:none;"></iframe>
+
+                </div>
+              </div>
+
+
+
+            </div>
+            
+
+            <div class="row">
+
+
+
+            </div> 
+
+    
+          </div>
+          <div class="modal-footer">
+            <a class='btn btn-default cancel' data-dismiss="modal" >Cerrar</a>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    
+
+  </script>
+
+
+
+
+
+
+
+    <!-- ------------------------------- -->
+    <!-- ----------PARÁMETROS-----------	 -->
+    <!-- ------------------------------- -->
+
+
+  <!-- Parametros - TipoRelacionOrganizacion -->
+  <script type="text/template" id="template_ParametrosTipoRelacionOrganizacionView"> 
+    
+      <select id="tipoRelacionOrganizacion" name="tipoRelacionOrganizacion" class="form-control select options"></select>
+    
+  </script>
+
+  <!-- Parametros - EstadoSolicitud - Opciones -->
+  <script type="text/template" id="template_ParametrosTipoRelacionOrganizacionItemView"> 
+    <%= _label %>
+  </script>
+
+
+
+  <!-- Parametros - EstadoSolicitud -->
+  <script type="text/template" id="template_ParametrosLocalidadView"> 
+  	
+			<select id="persona_localidad" name="persona_localidad" class="form-control select options"></select>
+		
+  </script>
+
+  <!-- Parametros - EstadoSolicitud - Opciones -->
+  <script type="text/template" id="template_ParametrosLocalidadItemView"> 
+    <%= _label %>
+  </script>
+
+    <!-- Parametros - Origen PJ -->
+  <script type="text/template" id="template_ParametrosOrigenPjView"> 
+    
+      <select id="origenPj" name="origenPj" class="form-control select options"></select>
+    
+  </script>
+
+  <!-- Parametros - Origen PJ-->
+  <script type="text/template" id="template_ParametrosOrigenPjItemView"> 
+    <%= _label %>
+  </script>
+
+  <!-- Parametros - Comunidad -->
+  <script type="text/template" id="template_ParametrosComunidadView"> 
+    
+			<select id="persona_comunidad" name="persona_comunidad" class="form-control select options"></select>
+		
+  </script>
+
+  <!-- Parametros - Comunidad - Opciones -->
+  <script type="text/template" id="template_ParametrosComunidadItemView"> 
+    <%= _label %>
+  </script>
+
+  <!-- Parametros - Comuna -->
+  <script type="text/template" id="template_ParametrosComunaView"> 
+  	
+			<select id="persona_comuna" name="persona_comuna" class="form-control select options"></select>
+		
+  </script>
+
+  <!-- Parametros - Comuna - Opciones -->
+  <script type="text/template" id="template_ParametrosComunaItemView"> 
+    <%= _label %>
+  </script>
+
+
+
+
+  <!-- Parametros - Comuna -->
+  <script type="text/template" id="template_ParametrosEstadosEspecialesView">     
+      <select id="persona_estado_especiales" name="persona_estado_especiales" class="form-control select options"></select>
+  </script>
+
+  <!-- Parametros - Comuna - Opciones -->
+  <script type="text/template" id="template_ParametrosEstadosEspecialesItemView"> 
+    <%= _label %>
+  </script>
+
+
+
+
+<!-- Parametros - Sector Geografico -->
+  <script type="text/template" id="template_ParametrosSectorGeograficoView"> 
+        <select id="persona_sector" name="persona_sector" class="form-control select options"></select>
+  </script>
+
+  <!-- Parametros - SectorGeografico - Opciones -->
+  <script type="text/template" id="template_ParametrosSectorGeograficoItemView"> 
+    <%= _label %>
+  </script>
+
+
+
+
+<!-- Parametros - Sector Geografico -->
+  <script type="text/template" id="template_ParametrosTipoOrganizacionView"> 
+        <select id="organizacion_tipo" name="organizacion_tipo" class="form-control select options"></select>
+  </script>
+
+  <!-- Parametros - SectorGeografico - Opciones -->
+  <script type="text/template" id="template_ParametrosTipoOrganizacionItemView"> 
+    <%= _label %>
+  </script>
+
+
+
+  <!-- Parametros - GENERO -->
+  <script type="text/template" id="template_ParametrosGeneroView"> 
+	
+			<select id="persona_genero" name="persona_genero" class="form-control select options"></select>
+	
+  </script>
+
+
+  <!-- Parametros - GENERO - Opciones -->
+  <script type="text/template" id="template_ParametrosGeneroItemView"> 
+    <%= _label %>
+  </script>
+
+
+<!-- Parametros - Tipo Persona -->
+  <script type="text/template" id="template_ParametrosTipoPersonaView"> 
+			<select id="persona_tipo_persona" name="persona_tipo_persona" class="form-control select options tipoPersona"></select>
+  </script>
+
+  <!-- Parametros - Tipo Persona - Opciones -->
+  <script type="text/template" id="template_ParametrosTipoPersonaItemView"> 
+    	<%= _label %>
+  </script>
+
+
+
+	<!-- Parametros - Tipo Estado Civil -->
+	<script type="text/template" id="template_ParametrosTipoEstadoCivilView"> 
+		
+	  		<select id="persona_estado_civil" name="persona_estado_civil" class="form-control select options"></select>
+	  	
+	</script>
+
+
+	<!-- Parametros - Tipo Estado Civil - Opciones -->
+	<script type="text/template" id="template_ParametrosTipoEstadoCivilItemView"> 
+		<%= _label %>
+	</script>
+
+
+
+	<!-- Parametros - Prevision -->
+	<script type="text/template" id="template_ParametrosPrevisionView"> 
+		
+	  
+	  		<select id="persona_tipo_prevision" name="persona_tipo_prevision" class="form-control select options"></select>
+	  	
+	</script>
+
+
+	<!-- Parametros - Prevision - Opciones -->
+	<script type="text/template" id="template_ParametrosPrevisionItemView"> 
+		<%= _label %>
+	</script>
+
+
+	<!-- Parametros - Escolaridad -->
+	<script type="text/template" id="template_ParametrosEscolaridadView"> 
+		
+	  		<select id="persona_tipo_escolaridad" name="persona_tipo_escolaridad" class="form-control select options"></select>
+	  
+	</script>
+
+
+	<!-- Parametros - Escolaridad - Opciones -->
+	<script type="text/template" id="template_ParametrosEscolaridadItemView"> 
+		<%= _label %>
+	</script>
+
+
+	<!-- Parametros - ActividadLaboral -->
+	<script type="text/template" id="template_ParametrosActividadLaboralView"> 
+		
+	  		<select id="persona_tipo_actividad" name="persona_tipo_actividad" class="form-control select options"></select>
+	  		
+	</script>
+
+
+	<!-- Parametros - ActividadLaboral - Opciones -->
+	<script type="text/template" id="template_ParametrosActividadLaboralItemView"> 
+		<%= _label %>
+	</script>
+
+
+	<!-- Parametros - SubtipoServicio -->
+	<script type="text/template" id="template_ParametrosSubtipoServicioView"> 
+	  	<select class="form-control select options subtipo_servicio"></select>				
+	</script>
+
+
+	<!-- Parametros - SubtipoServicio - Opciones -->
+	<script type="text/template" id="template_ParametrosSubtipoServicioItemView"> 
+		<%= _label %>
+	</script>
+
+
+
+	<!-- Parametros - EstadoSolicitud -->
+	<script type="text/template" id="template_ParametrosEstadoSolicitudView"> 
+	  	<select class="form-control select options estado_solicitud"></select>
+	</script>
+
+
+	<!-- Parametros - EstadoSolicitud - Opciones -->
+	<script type="text/template" id="template_ParametrosEstadoSolicitudItemView"> 
+		<%= _label %>
+	</script>
+
+
+  <!-- Parametros - VersionSolicitud -->
+  <script type="text/template" id="template_ParametrosVersionSolicitudView"> 
+      <select class="form-control select options version_solicitud"></select>
+  </script>
+
+
+  <!-- Parametros - VersionSolicitud - Opciones -->
+  <script type="text/template" id="template_ParametrosVersionSolicitudItemView"> 
+    V<%= version %>, <%= version_date %>, <%= version_by %>
+  </script>
+
+
+	  <!-- --------------------------------------------  -->
+    <!-- ----------Administracion Personas-----------	 -->
+    <!-- --------------------------------------------  -->
+
+    <!-- PersonaMainView -->
+	<script type="text/template" id="template_PersonaMainView"> 
+		<div class="row" style="font-size: 12px;">
+
+
+			<div class="personas info_general well col-lg-12 col-md-12 col-xs-12" style="font-size: 16px;" ></div>
+			<div class="personas ficha well col-lg-12 col-md-12 col-xs-12" style="font-size: 16px;"></div>
+	   </div>
+	</script>
+
+       	<!-- ListarPersonasMainView -->
+	<script type="text/template" id="template_ListarPersonasOrganizacionesMainView"> 
+		<div class="row">
+			<div class="well">
+				<div class="well filtroPersonas">
+					<p>
+						Administracion Personas
+					</p>
+				</div>
+
+				<div class="col-lg-12 col-md-12 col-xs-12 personas_solicitados">
+
+				</div>
+			</div>
+		</div>
+	</script>
+
+   <!-- PersonasListView -->
+  <script type="text/template" id="template_PersonasOrganizacionesListView"> 
+
+    <label class="control-label">Se encontraron <%= cantidadRegistros %> Personas</label>
+		<table class="table table-striped personas" style="font-size: 16px;">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>RUT</th>
+					<th>NOMBRE</th>
+					<th>TIPO</th>
+					<th>SECTOR</th>
+					<th>ACCIONES</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
+
+		<div class="row">
+			<div class="col-lg-2 col-md-2 col-xs-2">
+
+     <!-- <a id="urlExcel" target="_blank">
+                <span>Exportar resultados a Excel <i class="glyphicon glyphicon-download-alt"></i></span>
+			-->
+			</div> 
+
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				<ul class="pagination">
+					<li class="active">
+						<a href="#">&laquo;</a>
+					</li>
+					<li>
+						<a href="#">1</a>
+					</li>
+					<li>
+						<a href="#">2</a>
+					</li>
+					<li>
+						<a href="#">3</a>
+					</li>
+					<li>
+						<a href="#">4</a>
+					</li>
+					<li>
+						<a href="#">5</a>
+					</li>
+					<li>
+						<a href="#">&raquo;</a>
+					</li>
+				</ul>
+			</div>
+			<div class="col-lg-4 col-md-4 col-xs-4">
+
+        <a class='btn btn-default pull-right nueva_organizacion' >Nueva Organización</a> 
+				<a class='btn btn-default pull-right nueva_persona' >Nueva Persona</a>
+
+			</div>
+		</div>
+
+	</script>
+
+	<!-- PersonasFiltroView -->
+	<script type="text/template" id="template_PersonasOrganizacionesFiltroView"> 
+		
+		<div class="col-lg-12 col-md-12 col-xs-12">
+
+			<img src="img/personas.png" class="img-circle img-responsive pull-left" height="50" width="50" style="padding-right:10px;"><span style="font-size:24px;"> Personas y Organizaciones</span>
+		</div></br>
+
+		<form id ="filtroPersonas"class="form-horizontal" role="form">
+			<div class="form-group" style="font-size:14px;" >
+
+				<label  class="col-lg-1 col-md-1 col-xs-1 control-label text-right">RUT:</label>
+				<div class="col-lg-2 col-md-2 col-xs-2">
+					<input type="text" class="form-control input-sm filtro rut"  value="">
+				</div>
+
+				<label  class="col-lg-1 col-md-1 col-xs-1 control-label text-right">NOMBRE:</label>
+				<div class="col-lg-2 col-md-2 col-xs-2">
+					<input type="text" class="form-control input-sm filtro nombre"  value="">
+				</div>
+
+				<div class="col-lg-3 col-md-3 col-xs-3">
+					<label  class="col-lg-4 col-md-4 col-xs-4 control-label text-right">TIPO:</label>
+					<div class="col-lg-8 col-md-8 col-xs-8 filtro tipoPersona"></div>
+				</div>
+
+				<div class="col-lg-3 col-md-3 col-xs-3">
+					<label  class="col-lg-4 col-md-4 col-xs-4 control-label text-right">SECTOR:</label>
+					<div class="col-lg-8 col-md-8 col-xs-8 filtro sector"></div>
+				</div>
+
+
+        
+
+
+			</div>
+
+		</form>
+
+	</script>
+
+<!-- PersonaInfoGeneralView -->
+	<script type="text/template" id="template_PersonaInfoGeneralView"> 
+    
+		
+    <div class="row">
+    			<form id="formPersonaInfo">
+          <div class="modal-body"></div>
+        				<div class="col-lg-3 col-md-3 col-xs-3">
+                      <div> 
+                					<label  class="col-lg-4 col-md-4 col-xs-4 control-label">SEXO:</label>
+                					<div class="col-lg-6 col-md-6 col-xs-6">
+                						<div class="form-group genero"></div>
+                					</div>
+                      </div>
+
+                        <div> 
+                          <label  class="col-lg-4 col-md-4 col-xs-4 control-label">TIPO:</label>
+                          <div class="col-lg-6 col-md-6 col-xs-6">
+                            <input type="text" title="Persona Natural " class="form-control" disabled="disabled" value="Persona Natural" >
+                            <input id="tipo_persona_cod" name="tipo_persona_cod" type="hidden"  value="natural" >
+
+                          </div>
+                      </div> 
+
+                      <div> 
+                          <label  class="col-lg-4 col-md-4 col-xs-4 control-label">CONDICION:</label>
+                          <div class="col-lg-6 col-md-6 col-xs-6">
+                            <div class="form-group estadoEspecial"></div>
+                          </div>
+                      </div>
+
+
+
+        				</div>
+
+        				<div class="col-lg-4 col-md-4 col-xs-4">
+          					<div class="form-group">
+          						<label  id="label_nombre" class="col-lg-4 col-md-4 col-xs-4 control-label">NOMBRES:</label>
+          						<div class="col-lg-6 col-md-6 col-xs-6">
+          							<input type="text" onkeyup="javascript:this.value=this.value.toUpperCase();" class="form-control required" id="persona_nombre" name="persona_nombre" value="<%= nombre %>" >
+          						</div>
+          					</div>
+
+          					<div class="form-group">
+          						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">RUT:</label>
+          						<div class="col-lg-6 col-md-6 col-xs-6">
+          							<input type="text"  id="persona_rut" name="persona_rut" class="form-control persona_rut rut" placeholder="Ej:12345678-1"
+                         value= <%= persona_rut == '-' ? '' : persona_rut %>
+
+                           <%= rut == '' ? '' : disabled="disabled" %>  >
+
+
+          						</div>
+          					</div>
+        				</div>
+
+        				<div class="col-lg-4 col-md-4 col-xs-4">
+          					<div  class="form-group">
+          						<label  class="col-lg-6 col-md-6 col-xs-6 control-label">APELLIDO PATERNO:</label>
+            						<div class="col-lg-6 col-md-6 col-xs-6">
+            							<input onkeyup="javascript:this.value=this.value.toUpperCase();" type="text" id="persona_apellido_paterno" name="persona_apellido_paterno" class="form-control required"  value="<%= apellido_paterno %>" >
+            						</div>
+          					</div>
+          					
+                    <div id="div_apellido_materno" class="form-group">
+          						<label  class="col-lg-6 col-md-6 col-xs-6 control-label">APELLIDO MATERNO:</label>
+          						<div class="col-lg-6 col-md-6 col-xs-6">
+          							<input onkeyup="javascript:this.value=this.value.toUpperCase();" type="text" id="persona_apellido_materno" name="persona_apellido_materno" class="form-control"
+                         
+                          value= <%= apellido_materno == null ? '' : apellido_materno %>  >
+                          
+          						</div>
+          					</div>
+        				</div>
+    			</form>
+      </div>
+
+      </div>
+
+
+		</div>
+	</script>
+
+  <!-- EDITAR PersonaInfoGeneralView -->
+  <script type="text/template" id="template_PersonaJURIDICAInfoGeneralView"> 
+    <div class="row">
+
+      <form id="formPersonaInfo">
+       
+        <div class="col-lg-4 col-md-4 col-xs-4">
+            <label  class="col-lg-3 col-md-3 col-xs-3 control-label">TIPO:</label>
+            <div class="col-lg-9 col-md-9 col-xs-9">
+               <input type="text" class="form-control" disabled="disabled" value="Persona Juridica" >
+                 <input id="tipo_persona_cod" name="tipo_persona_cod" type="hidden"  value="juridica" >
+
+            </div>
+            <label  class="col-lg-3 col-md-3 col-xs-3 control-label">RUT:</label>
+            <div class="col-lg-9 col-md-9 col-xs-9">
+                <input type="text"  id="persona_rut" name="persona_rut" class="form-control persona_rut rut" placeholder="Ej:12345678-1" 
+                 value= <%= persona_rut == '-' ? '' : persona_rut %> 
+                  <%= rut == '' ? '' : disabled="disabled" %>  >
+              </div>
+          
+        </div>
+
+        <div class="col-lg-8 col-md-8 col-xs-8">
+              <label  class="col-lg-2 col-md-2 col-xs-2 control-label">NOMBRE:</label>
+              <div class="col-lg-10 col-md-10 col-xs-10">
+                  <input onkeyup="javascript:this.value=this.value.toUpperCase();" type="text" class="form-control required" id="persona_nombre" name="persona_nombre"  value="<%= nombre %>" >
+              </div>
+
+              <div class="col-lg-12 col-md-12 col-xs-12">
+                  <label  class="col-lg-2 col-md-2 col-xs-2 control-label">TIPO </label>
+                  <div class="col-lg-2 col-md-2 col-xs-2">
+                      <div class="form-group tipoOrganizacion"></div>
+                  </div>
+                  <label  class="col-lg-2 col-md-2 col-xs-2 control-label">ORIGEN PJ:</label>
+                  <div class="col-lg-2 col-md-2 col-xs-2">
+                     <div class="form-group origenPj"></div> 
+                  </div>
+
+                  <label  class="col-lg-2 col-md-2 col-xs-2 control-label">NUMERO PJ:</label>
+                  <div class="col-lg-2 col-md-2 col-xs-2">
+                  <input type="text" id="n_pj" name="n_pj"  class="form-control required"    
+                    value= <%= n_pj == null ? '' : n_pj %> 
+                    <%= n_pj == null ? '' : disabled="disabled" %>  >
+                  </div>
+                     
+                  
+              </div>
+        </div>
+
+       
+      </form>
+    </div>
+
+  </script>
+
+	<!-- PersonasItemView -->
+	<script type="text/template" id="template_PersonasOrganizacionesItemView"> 
+		
+		  <td><%= _id %> </td>
+		  <td style="width: 110px;"><a href="javascript:;" class="boton edicion"><%= rut %>-<%= dv %></a></td>
+		  <td>  <%= nombre %> <%= apellido_paterno %></td>
+		  <td><%= _embedded.tipoPersona._label %></td>
+		  <td><%= _embedded.sectorGeografico._label %></td>
+
+		  <td>
+		  	  <button class="btn btn-default boton edicion"><span  title="Editar" data-toggle="tooltip"  class="glyphicon glyphicon-pencil"></span></button>
+		  	  <button class="btn btn-default boton eliminar"><span  title="eliminar" data-toggle="tooltip"  class="glyphicon glyphicon-remove"></span></button>
+		  </td>
+
+	</script>
+
+	<!-- PersonaLocalizacionView-->
+	<script type="text/template" id="template_PersonaLocalizacionView"> 
+		
+	<div class="row">
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				<form class="form-horizontal" role="form" id="formLocalizacion">
+
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">DIRECCION: </label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<input type="text" class="form-control" id="persona_direccion" name="persona_direccion" value="<%= direccion %>" >
+						</div>
+					</div>
+
+					<div class="form-group comuna"></div>
+
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">COMUNA:</label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<div class="form-group comuna"></div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">SECTOR:</label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<div class="form-group sector_geografico"></div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">LOCALIDAD:</label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<div class="form-group localidad"></div>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">COMUNIDAD:</label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<div class="form-group comunidad"></div>
+						</div>
+					</div>
+
+				
+
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">FONO FIJO:</label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<input type="text" class="form-control" id="persona_telefono_fijo" placeholder="Ej: 55667788" name="persona_telefono_fijo"  maxlength="12"  value="<%= fono_fijo %>" >
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">FONO CELULAR:</label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<input type="text" class="form-control" id="persona_telefono_celular" placeholder="Ej: 045-2112233" name="persona_telefono_celular"  maxlength="12" value="<%= fono_celular %>" >
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label  class="col-lg-4 col-md-4 col-xs-4 control-label">E-MAIL:</label>
+						<div class="col-lg-8 col-md-8 col-xs-8">
+							<input type="text" class="form-control" id="persona_email" name="persona_email" value="<%= email %>" >
+						</div>
+					</div>
+
+          
+          <div class="form-group">
+               <label class="col-lg-4 col-md-4 col-xs-4 control-label">REFERENCIA:</label>
+                <div class="col-lg-8 col-md-8 col-xs-8">
+            
+               <textarea rows="1" id="persona_referencia" class="form-control" name="referencia"><%=referencia_ubicacion%></textarea>
+               </div>
+          </div>
+
+					<div class="form-group">
+						<label class="col-lg-4 col-md-4 col-xs-4 control-label">COORDENADAS:</label>
+
+						<div class="col-lg-8 col-md-8 col-xs-8">
+
+							<div class="form-group">
+  								<div class="input-group col-lg-6 col-md-6 col-xs-6">
+  									<input id="latitud" name="latitud" type="text" class="form-control"  value="<%= latitud %>"  >
+  									<span class="input-group-addon">X</span>
+  								</div>
+  								<div class="input-group col-lg-6 col-md-6 col-xs-6">
+  									<input id="longitud" name="longitud" type="text" class="form-control" value="<%= longitud %>">
+  									<span class="input-group-addon">Y</span>
+  								</div>
+							</div>
+						</div>
+					</div>
+
+
+					<button type="button" class="btn save btn-primary">
+						Guardar
+					</button>
+					<button type="button"  class="btn cancel btn-primary">
+						Cancelar
+					</button>
+
+				</form>
+
+			</div>
+			<div class="col-lg-6 col-md-6 col-xs-6">
+				<div>
+					<input type="text" maxlength="100" id="address" placeholder="Dirección" />
+					<input type="button" id="search" value="Buscar" />
+					<div id='map_canvas' style="width:400px; height:400px;"></div>
+				</div>
+			</div>
+
+	</script>
+
+		<!-- Persona - Ficha -->
+	<script type="text/template" id="template_PersonaFichaView"> 
+		
+					
+		<ul class="nav nav-tabs" id="myTab2">
+		  	<li class="tab localizacion active"><a href="#localizacion" data-toggle="tab">Localización</a></li>
+		  	<li class="tab datos_personales"><a href="#datos_personales" data-toggle="tab">Datos Personales</a></li>
+		  	<li class="tab servicios_solicitados"><a href="#servicios_solicitados" data-toggle="tab">Servicios Solicitados</a></li>
+	        <li class="tab grupo_hogar"><a href="#grupo_hogar" data-toggle="tab">Grupo Hogar</a></li>
+	        <li class="tab organizaciones"><a href="#organizaciones" data-toggle="tab">Organizaciones</a></li>
+            <li class="tab miembros"><a href="#miembros" data-toggle="tab">Miembros</a></li>
+		  
+		</ul>
+
+		<div class="tab-content">
+
+			<div class="tab-pane well persona info localizacion active" id="localizacion"></div>
+			<div class="tab-pane well persona info datos_personales" id="datos_personales"></div>
+			<div class="tab-pane well persona info servicios_solicitados" id="servicios_solicitados"></div>
+	        <div class="tab-pane well persona info grupo_hogar" id="grupo_hogar"></div>
+	        <div class="tab-pane well persona info organizaciones" id="organizaciones"></div>
+          <div class="tab-pane well persona info miembros" id="miembros"></div>
+		
+		</div>
+			
+	</script>
+
+
+
+
+
+	<!-- Personas - Datos personales -->
+	<script type="text/template" id="template_PersonaDatosPersonalesView"> 
+			<form id="formPersonasDatosPersonales">
+      		<div class="form-inline row">
+      			<div class="col-lg-6 col-md-6 col-xs-6">
+
+      				  	<div class="form-group">
+      					  	<label  class="col-lg-6 col-md-6 col-xs-6 control-label">N° EXPEDIENTE:</label>
+      					  	<div class="col-lg-6 col-md-6 col-xs-6">
+      					  		<input id="nExpediente" name="nExpediente" type="text" class="form-control"  value="<%= numero_expediente %>" >
+      					  	</div>
+      				  	</div>
+      			</div>
+      			<div class="col-lg-6 col-md-6 col-xs-6">
+      				  	<div class="form-group">
+      					  	<label  class="col-lg-6 col-md-6 col-xs-6 control-label">FICHA SOCIAL:</label>
+      					  	<div class="col-lg-6 col-md-6 col-xs-6">
+      					  		<input id="fichaProteccion" name="fichaProteccion" type="text" class="form-control"  value="<%= ficha_proteccion_social %>" >
+      					  	</div>
+      				  	</div>
+
+      			</div>
+      		</div>
+
+      		<hr size="3"  />
+
+
+      		<div class="row">
+
+      			<div class="col-lg-6 col-md-6 col-xs-6">
+
+
+      				  <div class="row">
+      					  	<label  class="col-lg-4 col-md-4 col-xs-4 control-label">FECHA DE NACIMIENTO:</label>
+      					  	<div class="col-lg-6 col-md-6 col-xs-6">
+      					  	   	<div class="input-group">
+      				              	<input type="text" id="fecha_nacimiento" name="fecha_nacimiento" class="form-control fechaESP" value="<%= fecha_estado_actual %>" />
+      				              	<span class="btn btn-default input-group-addon input-large calendar">
+                                  <i class="glyphicon glyphicon-calendar"></i>
+                              </span>
+      				          </div>
+      					  	</div>
+      					  	
+      				  </div>
+
+                <div class="row">
+                    <div class="row">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">ESTADO CIVIL:</label>
+                      <div class="col-lg-6 col-md-6 col-xs-6">
+                       <div class="form-group estado_civil"></div>
+                      </div>
+                 </div>
+
+                  <div class="row">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">SISTEMA DE SALUD: </label>
+                      <div class="col-lg-6 col-md-6 col-xs-6">
+                        <div class="form-group prevision"></div>
+                      </div>
+                 </div>
+
+                 <div class="row">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">ESCOLARIDAD: </label>
+                      <div class="col-lg-6 col-md-6 col-xs-6">
+                        <div class="form-group escolaridad"></div>
+                      </div>
+                 </div>
+
+                 <div class="row">
+                      <label  class="col-lg-4 col-md-4 col-xs-4 control-label">ACTIVIDAD: </label>
+                      <div class="col-lg-6 col-md-6 col-xs-6">
+                        <div class="form-group actividad_laboral"></div>
+                      </div>
+                    </div>
+              	 </div>
+                 
+      					 
+      					
+                 
+      				  
+      			</div>
+        			<div class="col-lg-5 col-md-5 col-xs-5">
+          				<div class="row">
+          					 <label class="col-lg-12 col-md-12 col-xs-12">PROGRAMAS SOCIALES:</label>
+          					 <textarea id="programas_sociales" name="programas_sociales" rows="6" class="col-lg-12 col-md-12 col-xs-12 form-control" ><%= programas_sociales %></textarea>
+          				</div>
+        			</div>
+      		</div>
+
+          <button type="button" class="btn save btn-primary">Guardar </button>
+                <button type="button" class="btn cancel btn-primary">Cancelar</button>	
+			</form>
+	</script>
+
+		<!-- Consulta - Servicios Solicitados -->
+	<script type="text/template" id="template_PersonaServiciosSolicitadosView"> 
+		<label class="col-lg-3 col-md-3 col-xs-3"><%= length %> solicitudes encontradas</label>
+			<table class="table table-striped solicitudes" style="font-size: 16px;">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Fecha Solicitud</th>
+                  <th>RUT</th>
+                  <th>Servicio</th>
+                  <th>Subtipo</th>
+                  <th>Estado</th>
+                  <th>Fecha</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+		</div>
+			
+	</script>
+
+  <!-- Persona - Grupo Hogar -->
+  <script type="text/template" id="template_PersonaGrupoHogarView"> 
+
+  <label class="col-lg-3 col-md-3 col-xs-3"><%= length %> hogares encontradas</label>
+    <div align="right">
+      <button type="button" class="btn asociarHogar btn-primary">Asociar Hogar </button>
+      <button type="button" class="btn crearHogar btn-primary">Crear Nuevo Hogar </button>
+    </div>
+    <br/><br/>
+    <div class="accordion hogares" id="accordion2">
+      
+    </div>
+    
+  </script>
+
+    <!-- Persona - Grupo Hogar -->
+  <script type="text/template" id="template_PersonaGrupoHogarItemView"> 
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+              <button type="button" class="accordion-toggle btn btn-default" data-toggle="collapse" 
+                 data-parent="#accordion2" href="#collapse<%= _id %>">
+                  HOGAR-<%= hogar_id %>: <%= cantmiembros %> personas encontradas
+              </button >
+              
+              <button  type="button" class="btn <%=(persona_rut==_embedded.hogar._label)?'eliminarHogar':'eliminarRelacion'%>"
+                  data = "<%=(persona_rut==_embedded.hogar._label)?''+hogar_id+'':''+_id+''%>" 
+                  >
+               
+
+                 <%=(persona_rut==_embedded.hogar._label)?'Eliminar Hogar':'Eliminar Relacion'%>
+               
+
+               </button>
+        </div>
+      <div id="collapse<%= _id %>" class="accordion-body collapse in">
+        <div class="accordion-inner">
+            <table class="table table-striped miembros" style="font-size: 16px;">
+                <thead>
+                  <tr>
+                    <th>RUT</th>
+                    <th>Nombre</th>
+                    <th>Rol/Relación con Jefe de Hogar</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+              </table>
+        </div>
+      </div>
+    </div>
+
+
+    
+  </script>
+
+      <!-- Persona - Grupo Hogar -->
+  <script type="text/template" id="template_PersonaGrupoHogarMiembrosItemView"> 
+    
+      <td> <a onclick="location.href='index.html#consulta/persona/<%= persona_rut %>'"><%= persona_rut %></a></td>
+      <td><%= _embedded.persona._label %></td>
+      <td>
+      <input id="hidden_condicion_<%=id%>" type="hidden" value="<%= condicion_en_hogar %>" class="hiddenCondicion"/>
+       <div  id="edit_condicion_<%=id%>" class="Divcontenedor"><%=  condicion_en_hogar %></div>
+
+      
+      <td>
+
+           <% if(persona_rut != _embedded.hogar._label && persona_rut==$('#persona_rut').val().split("-")[0]) { %>
+               <span  id="editar_<%=id%>" class="glyphicon glyphicon-pencil btn edicion" data-toggle="tooltip" title="Editar" >   </span>
+               <span   id="cancelar_<%=id%>" style="display:none" class="glyphicon glyphicon-remove btn cancelar" data-toggle="tooltip" title="cancelar" > </span>
+        
+
+
+          <% } else { %>
+          <% } %>
+      </td>
+ 
+
+    
+  </script>
+
+      <!-- Consulta - Miembros -->
+  <script type="text/template" id="template_PersonaMiembrosView"> 
+
+    <label class="col-lg-3 col-md-3 col-xs-3"><%= length %> miembros encontrados</label>
+
+    <div align="right">
+          <button type="button" class="btn  btn-primary" data-toggle="modal" data-target="#myModal">Añadir Miembro</button>
+    </div>
+
+
+
+      <table class="table table-striped miembros"  style="font-size: 16px;">
+              <thead>
+                <tr>
+                  <th>Rut</th>
+                  <th>Nombre</th>
+                  <th>Rol/Relación</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+
+              </tbody>
+            </table>
+
+    </div>
+
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" onclick='$("#myModal").modal("hide")' class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Añadir Miembros</h4>
+              </div>
+              <div class="modal-body">
+                 
+                <div class="row well">
+                      <table>
+                         <tr>
+                            <td>RUT</td>
+                            <td>
+                                     <div class="input-group col-lg-12 col-md-12 col-xs-12">
+                                        <input type="text" id="persona_rut_natural" name="persona_rut_natural" class="form-control input-sm persona_rut" placeholder="RUT nuevo integrante">
+                                        <span class="input-group-addon" style="padding: 0;">                                                
+                                            <button class="btn button_persona_rut" type="button"><i class="glyphicon glyphicon-search"></i></button>                                                  
+                                        </span>                                                                                     
+                                      </div>
+                            </td>
+                            <td>ROL / RELACION</td>
+                            <td><div class="form-group tipoRelacionOrganizacionView"></div></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>
+                               
+                             </td>
+                            <td></td>
+                             <td></td>
+                        </tr>
+                      </table>
+                  </div>
+              </div>
+
+                 <div class="row well">
+                        <span id="modal_nombre_persona"/>  
+                 </div>
+              <div class="modal-footer">
+                <button type="button" onclick='$("#myModal").modal("hide")' class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button id="btn-save-miembros" disabled type="button" class="btn save btn-primary">Guardar</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+      
+  </script>
+
+
+  <!-- Consulta - Miembros - Item-->
+  <script type="text/template" id="template_PersonaMiembrosItemView"> 
+      <td>
+         <span><%= persona_rut %></span>
+      </td>
+      <td>
+          <%= _embedded.miembro._label %>
+      </td>
+      
+     
+      <td class='TDcondicion_hogar'>
+             <input id="rol_id_<%=  id %>"  relacion = "<%=  _embedded.rol.id %>" type="hidden" value="<%=  _embedded.rol._label %>" class="hiddenCondicion"/>
+             <div id="Divcontenedor_<%=  id %>" class="Divcontenedor"><%=  _embedded.rol._label %></div>
+      </td>
+
+      <td>
+
+      <span  id="edit_<%=  id %>" class="glyphicon glyphicon-pencil btn edicion" data-toggle="tooltip" title="Editar"></span>
+       <span  id="candel_edit_<%=  id %>"class="glyphicon glyphicon-refresh btn cancelar_edicion" data-toggle="tooltip" title="Cancelar edición" style="display:none;"></span> 
+       <span class="glyphicon glyphicon-remove btn eliminar" data-toggle="tooltip" title="Eliminar"></span>                        
+             
+<!--
+
+          <span class="glyphicon glyphicon-pencil btn edicion" data-toggle="tooltip" title="Editar"></span> 
+            <span class="glyphicon glyphicon-remove btn eliminar" data-toggle="tooltip" title="Eliminar"></span>
+
+            -->
+      </td>
+  </script>
+
+
+
+</body>
+</html>

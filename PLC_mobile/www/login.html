@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>PLC</title>
+
+	<link href="css/jquery.alerts.css" rel="stylesheet">
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
+	<link href="css/datepicker.css" rel="stylesheet">	
+	<!--<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script> -->
+	<script src="js/libs/jquery/jquery-1.7.1.min.js"></script>		
+	<script src="js/libs/underscore/underscore-min.js"></script>
+	<script src="js/libs/backbone/backbone-min.js"></script>
+	<script src="js/libs/bootstrap/bootstrap.min.js"></script>
+	<script src="js/libs/bootstrap/bootstrap-datepicker.js"></script>	
+	<script type="text/javascript" src="js/codigo-app.js?v=13"></script>	
+	<script type="text/javascript" src="js/codigo-consulta.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-menu.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-solicitudes.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-router.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-models.js?v=13"></script>
+	<script type="text/javascript" src="js/jquery.alerts.js"></script>
+	<script type="text/javascript" src="js/codigo-params.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-adminPersonas.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-hogares.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo_funciones.js?v=13"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+  <script type="text/javascript" src="js/googleMap.js"></script>
+  <script type="text/javascript" src="js/jquery.validate.js"></script>
+  <script type="text/javascript" src="js/validacionesForm.js"></script>
+	<script type="text/javascript" src="js/jquery.Rut.js"></script>
+  <script type="text/javascript" src="js/plc_mensajes.js"></script>
+
+</head>
+<body>
+	<div class="container-fluid">
+
+		<div class="row">
+			
+			<div class="col-lg-12 text-center">
+				<img src="img/header2.jpg" class="img-rounded" style="width:100%">
+			</div>
+
+			
+			<!-- BARRA NAVEGACION -->
+
+			<div class="well text-center col-lg-12 col-md-12 col-xs-12">
+				
+				<H1>Sistema de Registro y Control de Servicios Municipales</H1>
+
+	
+			</div>	
+		</div>	
+
+
+		<script type='text/javascript'>
+
+		function login(){
+  					
+  					var user = $('.usuario').val();
+  					var pass = $('.contraseña').val();
+  					console.log(user);
+  					$.ajax({
+							type: 'GET',
+							url: "http://uranio.tide.cl/plc_test/user/loginFromAjax",
+							data:"UserLogin[username]="+user+"&UserLogin[password]="+pass,
+							dataType: 'jsonp',
+							success: function(json) {
+							console.log(json);
+							App.token = json;
+							window.location = "index.html?t="+json;
+							},
+							error: function(e) {
+							console.log(e.message);
+							}
+							});
+  				}
+		</script>
+
+
+
+
+		<div class="col-lg-12 col-md-12 col-xs-12">
+        <div class="col-lg-1 col-md-1 col-xs-1"></div>
+        <div class="col-lg-5 col-md-5 col-xs-5">
+            <img width="100%" src="img/municipalidad_de_padre-las-casas.jpg"/>
+        </div>
+        <div class="col-lg-2 col-md-2 col-xs-2"></div>
+        <div class="col-lg-4 col-md-4 col-xs-4 well text-center">
+            <h4 class="form-signin-heading">Para acceder al sistema por favor ingrese su nombre de usuario y contraseña </h4><br /><br/><br/>
+            <div class="login-inicio">
+                <form class="form-signin">
+		      		<div class="well text-center">
+			        	
+			       		<input type="text" class="form-control usuario" placeholder="Usuario" autofocus="">
+			        	<input type="password" class="form-control contraseña" placeholder="Contraseña">
+
+			        	<button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Acceder</button>
+
+		        	</div>
+		      	</form>
+           </div> <!-- End login-inicio -->
+            <br/><br/><br/>
+            <p>El acceso a este sistema está restringido únicamente a los funcionarios de la institución</p>    
+            <br class="clear" />
+
+        </div>
+    </div>  
+
+
+
+</body>
+</html>

@@ -1,0 +1,489 @@
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>PLC</title>
+	
+	
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
+	<script src="js/libs/jquery/jquery-1.7.1.min.js"></script>		
+	<script src="js/libs/underscore/underscore-min.js"></script>
+	<script src="js/libs/backbone/backbone-min.js"></script>
+	<script src="js/libs/bootstrap/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="js/codigo-app.js?v=13"></script>	
+	<!--<script type="text/javascript" src="js/codigo-consulta.js?v=13"></script>-->
+	<script type="text/javascript" src="js/codigo-router.js?v=13"></script>
+	<script type="text/javascript" src="js/codigo-models.js?v=13"></script>
+
+</head>
+
+<body>
+		<!-- CONTENIDO -->
+	<div class="container">
+
+		<div class="row">
+			
+			<div class="col-lg-12">
+				<img src="img/nuevosuperior02.png" class="img-rounded ">
+			</div>
+
+			
+			<!-- BARRA NAVEGACION -->
+
+			<div class="navbar col-lg-12">
+				
+
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+				    <ul class="nav navbar-nav">
+
+				        <li class="consulta active"><a href="#">Consulta</a></li>
+						<li class="gestion servicios"><a href="#">Gestión Servicios</a></li>
+						<li class="administracion"><a href="#">Administración</a></li>
+				      
+				    </ul>
+				    
+				    <ul class="nav navbar-nav navbar-right">
+				      	<li class="navbar-text"><p>Carlos Ramirez</p></li>
+						<li><a href="#">(cerrar sesión)</a></li>
+				    </ul>
+				</div>
+
+				<ul class="breadcrumb">
+				  <li><a href="#">Inicio</a></li>
+				  <li class="active">Consulta</li>
+				</ul>
+			</div>	
+
+			<div class="seccion consulta col-lg-12">
+			
+
+				<div class="row">
+					<div class="consulta busqueda well col-lg-12">
+						
+						<div class="form-inline">
+						  <label>RUT</label>
+						  <input type="text" class="input" placeholder="Ingrese RUT">
+						  <button type="submit" class="btn">Buscar</button>
+						  <label class="pull-right">
+						  	<H3>CONSULTA FICHA BENEFICIARIO</H3>
+						  </label>
+						</div>	
+
+					</div>
+
+					<div class="consulta info general well col-lg-12">
+						
+						<div class="row">
+							<div class="col-lg-4 form-inline">
+							  <label class="">TIPO:</label>
+							  <input type="text" class="input " value="Persona Natural">
+							</div>
+
+							<div class="col-lg-4">
+							  
+								  <div class="form-inline row">
+									  <label class="col-lg-6">NOMBRES:</label>
+									  <input type="text" class="input col-lg-5" value="Carmen Gloria">
+								  </div>
+
+								  <div class="form-inline row">
+									  <label class="col-lg-6">APELLIDO PATERNO:</label>
+									  <input type="text" class="input col-lg-5" value="Salas">
+								  </div>
+
+							</div>
+
+							<div class="col-lg-4">
+
+								<div class="form-inline row">
+								  <label class="col-lg-6">RUT:</label>
+								  <input type="text" class="input col-lg-5" value="8955565-7">
+								</div>
+
+								<div class="form-inline row">
+								  <label class="col-lg-6">APELLIDO MATERNO:</label>
+								  <input type="text" class="input col-lg-5" value="Arriagada">
+								</div>
+
+							</div>	
+						</div> 
+						
+					</div>
+
+				<div class="ficha well">
+					
+					<ul class="nav nav-tabs" id="myTab">
+					  <li class="active"><a href="#localizacion" data-toggle="tab">Localización</a></li>
+					  <li><a href="#datos_personales" data-toggle="tab">Datos Personales</a></li>
+					  <li><a href="#servicios_solicitados" data-toggle="tab">Servicios Solicitados</a></li>
+					  <li><a href="#grupo_hogar" data-toggle="tab">Grupo Hogar</a></li>
+					  <li><a href="#organizaciones" data-toggle="tab">Organizaciones</a></li>
+					</ul>
+
+					<div class="tab-content">
+
+						<div class="tab-pane consulta info localizacion active" id="localizacion">
+							<div class="row">
+								<div class="col-lg-6">
+								  
+									  <div class="form-inline row">
+										  <label class="col-lg-3">DIRECCION:</label>
+										  <input type="text" class="input col-lg-5" value="Las Lomas Sector Los Leños">
+									  </div>
+
+									  <div class="form-inline row">
+										  <label class="col-lg-3">COMUNA:</label>
+										  <input type="text" class="input col-lg-5" value="Padre Las Casas">
+									  </div>
+
+									  <div class="form-inline row">
+										  <label class="col-lg-3">SECTOR:</label>
+										  <input type="text" class="input col-lg-5" value="Huichahue">
+									  </div>	
+
+									  <div class="form-inline row">
+										  <label class="col-lg-3">LOCALIDAD:</label>
+										  <input type="text" class="input col-lg-5" value="Laguna Verde - Posta">
+									  </div>
+
+									  <div class="form-inline row">
+										  <label class="col-lg-3">COMUNIDAD:</label>
+										  <input type="text" class="input col-lg-5" value="Catrileo - Mariñao">
+									  </div>
+
+									  <div class="form-inline row">
+										  <label class="col-lg-3">FONO FIJO:</label>
+										  <input type="text" class="input col-lg-5" value="452929191">
+									  </div>
+
+								  	  <div class="form-inline row">
+										  <label class="col-lg-3">FONO CELULAR:</label>
+										  <input type="text" class="input col-lg-5" value="9997732365">
+									  </div>
+
+									  <div class="form-inline row">
+										  <label class="col-lg-3">E-MAIL:</label>
+										  <input type="text" class="input col-lg-5" value="carmen-salas@gmail.com">
+									  </div>
+
+									  <div class="form-inline row">
+										  <label class="col-lg-3">COORDENADAS:</label>
+										  <div class="form-inline row">
+											  <input type="text" class="input col-lg-1">
+											  <label class="col-lg-2">LAT.(x)</label>
+											  <input type="text" class="input col-lg-1">
+											  <label class="col-lg-2">LON.(Y)</label>
+										  </div>
+									  </div>
+
+								</div>
+								<div class="col-lg-5">
+									<a class="pull-left" href="#">
+									    <img class="img-rounded" src="img/map.jpg">
+									</a>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="tab-pane consulta info datos_personales" id="datos_personales">
+							<div class="form-inline row">
+								<div class="col-lg-6">
+									<label class="">N° EXPEDIENTE:</label>
+									<input type="text" class="input " >
+								</div>
+								<div class="col-lg-6">
+									<label class="">FICHA DE PROTECCIÓN SOCIAL:</label>
+									<select>
+									  <option>Si</option>
+									  <option>No</option>
+									</select>
+								</div>
+							</div>
+
+							<hr size="3"  />
+
+
+							<div class="row">
+
+								<div class="col-lg-6">
+									<div class="input-append date form-inline row" id="dp3" data-date="12-02-2012" data-date-format="dd-mm-yyyy">
+									  <label class="col-lg-4">FECHA DE NACIMIENTO:</label>
+									  <input class="input col-lg-4" type="text" value="12-02-2012">
+									  <button class="btn btn-default col-lg-1" type="button"><i class="glyphicon glyphicon-ok "></i></button>
+									</div>
+
+									<div class="form-inline row">
+										<label class="col-lg-4">ESTADO CIVIL:</label>
+										<select class="col-lg-5">
+										  <option>Soltero</option>
+										  <option>Casado</option>
+										  <option>Viudo</option>
+										  <option>Separado</option>
+										</select>
+									</div>
+
+									<div class="form-inline row">
+										<label class="col-lg-4">TIPO PREVISIÓN:</label>
+										<select class="col-lg-5">
+										  <option>Isapre</option>
+										  <option>Fonasa</option>
+										</select>
+									</div>
+
+									<div class="form-inline row">
+										<label class="col-lg-4">ESCOLARIDAD:</label>
+										<select class="col-lg-5">
+										  <option>Enseñanza Media Incompleta</option>
+										  <option>Enseñanza Media Completa</option>
+										  <option>Enseñanza Superior Incompleta</option>
+										  <option>Enseñanza Superior Completa</option>
+										</select>
+									</div>
+
+									<div class="form-inline row">
+										<label class="col-lg-4">ACTIVIDAD LABORAL:</label>
+										<select class="col-lg-5">
+										  <option>Empleado-Independiente</option>
+										  <option>Empleado-Dependiente</option>
+										</select>
+									</div>
+
+								</div>
+
+								<div class="col-lg-5 ">
+									<div class="row">
+										<label class="col-lg-12">PROGRAMAS SOCIALES:</label>
+										<textarea rows="6" class="col-lg-12"></textarea>
+									</div>
+								</div>
+
+							</div>	
+
+						</div>
+
+
+						<div class="tab-pane consulta info servicios_solicitados" id="servicios_solicitados">
+							<label class="col-lg-3">3 solicitudes encontradas</label>
+							<table class="table table-hover">
+				              <thead>
+				                <tr>
+				                  <th>ID</th>
+				                  <th>Fecha Solicitud</th>
+				                  <th>RUT</th>
+				                  <th>Servicio</th>
+				                  <th>Subtipo</th>
+				                  <th>Estado</th>
+				                  <th>Fecha</th>
+				                  <th>Acciones</th>
+				                </tr>
+				              </thead>
+				              <tbody>
+				                <tr>
+				                  <td>52235</td>
+				                  <td>29/06/2013</td>
+				                  <td>8955565-7</td>
+				                  <td>Ayuda Social</td>
+				                  <td>Medicamentos</td>
+				                  <td>En evaluación</td>
+				                  <td>05/07/2013</td>
+				                  <td><span class="glyphicon glyphicon-search"></span></td>
+				                </tr>
+				                <tr>
+				                  <td>52235</td>
+				                  <td>29/06/2013</td>
+				                  <td>8955565-7</td>
+				                  <td>Ayuda Social</td>
+				                  <td>Medicamentos</td>
+				                  <td>En evaluación</td>
+				                  <td>05/07/2013</td>
+				                  <td><span class="glyphicon glyphicon-search"></span></td>
+				                </tr>
+				                <tr>
+				                  <td>52235</td>
+				                  <td>29/06/2013</td>
+				                  <td>8955565-7</td>
+				                  <td>Ayuda Social</td>
+				                  <td>Medicamentos</td>
+				                  <td>En evaluación</td>
+				                  <td>05/07/2013</td>
+				                  <td><span class="glyphicon glyphicon-search"></span></td>
+				                </tr>
+				              </tbody>
+				            </table>
+
+						</div>
+
+						<div class="tab-pane consulta info grupo_hogar" id="grupo_hogar">
+							
+							<div class="accordion" id="accordion2">
+							  <div class="accordion-group">
+							    <div class="accordion-heading">
+							      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+							        HOGAR-1: 5 personas encontradas
+							      </a>
+							    </div>
+							    <div id="collapseOne" class="accordion-body collapse in">
+							      <div class="accordion-inner">
+								        <table class="table table-hover">
+							              <thead>
+							                <tr>
+							                  <th>RUT</th>
+							                  <th>Nombre</th>
+							                  <th>Rol/Relación con Jefe de Hogar</th>
+							                </tr>
+							              </thead>
+							              <tbody>
+							                <tr>
+							                  <td>8.955.565-7</td>
+							                  <td>Carmen Gloria Salas Arriagada</td>
+							                  <td>Cónyuge (esposa)</td>
+							                </tr>
+							                <tr>
+							                  <td>8.945.345-6</td>
+							                  <td>Carlos Alfonzo Araneda Contreras</td>
+							                  <td>Jefe de Hogar</td>
+							                </tr>
+							                <tr>
+							                  <td>11.345.864-9</td>
+							                  <td>Martín Alejandro Araneda Contreras</td>
+							                  <td>Hermano</td>
+							                </tr>
+							                <tr>
+							                  <td>22.343.645-3</td>
+							                  <td>Sofía Elizabeth Araneda Salas</td>
+							                  <td>Hija</td>
+							                </tr>
+							                <tr>
+							                  <td>19.354.746-6</td>
+							                  <td>Pablo Andrés Araneda Salas</td>
+							                  <td>Hijo</td>
+							                </tr>
+							              </tbody>
+							            </table>
+							      </div>
+							    </div>
+							  </div>
+							  <div class="accordion-group">
+							    <div class="accordion-heading">
+							      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+							        HOGAR-2: 3 personas encontradas
+							      </a>
+							    </div>
+							    <div id="collapseTwo" class="accordion-body collapse">
+							      <div class="accordion-inner">
+							        	<table class="table table-hover">
+							              <thead>
+							                <tr>
+							                  <th>RUT</th>
+							                  <th>Nombre</th>
+							                  <th>Rol/Relación con Jefe de Hogar</th>
+							                </tr>
+							              </thead>
+							              <tbody>
+							                <tr>
+							                  <td>8.955.565-7</td>
+							                  <td>Carmen Gloria Salas Arriagada</td>
+							                  <td>Cónyuge (esposa)</td>
+							                </tr>
+							                <tr>
+							                  <td>8.945.345-6</td>
+							                  <td>Carlos Alfonzo Araneda Contreras</td>
+							                  <td>Jefe de Hogar</td>
+							                </tr>
+							                <tr>
+							                  <td>11.345.864-9</td>
+							                  <td>Martín Alejandro Araneda Contreras</td>
+							                  <td>Hermano</td>
+							                </tr>
+							              </tbody>
+							            </table>
+							      </div>
+							    </div>
+							  </div>
+							</div>
+
+
+						</div>
+						<div class="tab-pane consulta info organizaciones" id="organizaciones">
+							
+							<label class="col-lg-3">3 organizaciones asociadas</label>
+							<table class="table table-hover">
+				              <thead>
+				                <tr>
+				                  <th>RUT</th>
+				                  <th>Organización</th>
+				                  <th>Relación/Rol</th>
+				                </tr>
+				              </thead>
+				              <tbody>
+				                <tr>
+				                  <td>79.667.874-2</td>
+				                  <td>Club Deportivo Maquehue</td>
+				                  <td>Socio</td>
+				                </tr>
+				                <tr>
+				                  <td>65.876.987-1</td>
+				                  <td>Cooperativa Campesina Los Leños</td>
+				                  <td>Socio - Tesorero</td>
+				                </tr>
+				                <tr>
+				                  <td>89.564.332-9</td>
+				                  <td>Comunidad Rural Los Leños</td>
+				                  <td>Miembro</td>
+				                </tr>
+				              </tbody>
+				            </table>
+
+						</div>
+
+					</div>
+
+					<script>
+					  $(function () {
+					    $('#myTab a:last').tab('show');
+					  })
+
+
+					</script>
+
+				</div>
+				
+				
+			</div>
+		</div>
+
+
+
+
+	</div>	
+
+
+      	<!-- TEMPLATES -->
+
+
+	<!-- ConsultaMainView -->
+	<script type="text/template" id="template_ConsultaMainView"> 
+		<div class="alert">Alerta</div>
+		<div class="row">
+			<div class="span12 consulta busqueda"></div>
+			<div class="span12 consulta info general"></div>
+			<div class="span12 ficha"></div>
+			<div class="span12 consulta info solicitudes"></div>
+			<div class="span12 consulta info hogares"></div>
+			<div class="span12 consulta info organizaciones"></div>
+			<div class="span12 consulta info miembros"></div>
+		</div>
+	</script>
+
+	<!-- Consulta - Busqueda -->
+	<script type="text/template" id="template_ConsultaBusquedaView"> 
+		<label>Buscar persona:</label>
+	    <input type="text" class = "rut" placeholder="RUT de persona" value="<%= rut %>">
+	</script>
+
+
+
+</body>
+</html>

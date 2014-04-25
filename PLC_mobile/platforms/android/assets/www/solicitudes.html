@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title></title>
+
+	<link href="css/bootstrap.css" rel="stylesheet">
+	<link href="css/bootstrap-glyphicons.css" rel="stylesheet">
+	<script src="js/libs/jquery/jquery-1.7.1.min.js"></script>		
+	<script src="js/libs/underscore/underscore-min.js"></script>
+	<script src="js/libs/backbone/backbone-min.js"></script>
+	<script src="js/libs/bootstrap/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div class="container">
+
+		<div class="row">
+			
+			<div class="col-lg-12 text-center">
+				<img src="img/nuevosuperior02.png" class="img-rounded" style="width:100%">
+			</div>
+
+			
+			<!-- BARRA NAVEGACION -->
+
+			<div class="navbar col-lg-12">
+				
+
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
+				    <ul class="nav navbar-nav">
+
+				        <li class="consulta"><a onclick="location.href='index.html'">Consulta</a></li>
+						<li class="gestion servicios active"><a href="#">Gestión Servicios</a></li>
+						<li class="administracion"><a href="#">Administración</a></li>
+				      
+				    </ul>
+				    
+				    <ul class="nav navbar-nav navbar-right">
+				      	<li class="navbar-text"><p>Carlos Ramirez</p></li>
+						<li><a onclick="location.href='login.html'">(cerrar sesión)</a></li>
+				    </ul>
+				</div>
+
+				<ul class="breadcrumb">
+				  <li><a onclick="location.href='mainmenu.html'">Inicio</a></li>
+				  <li>Gestión Servicios</li>
+				  <li class="active">Ayudas Sociales</li>
+				</ul>
+			</div>	
+			<div class="well col-lg-12">
+				
+			<div class="well">
+				<div class="col-lg-12">
+					
+					<H2>Ayudas Sociales</H2>
+
+		
+				</div>	
+
+				<form class="form-horizontal" role="form">
+				  	<div class="form-group">
+					  	
+					  	<label  class="col-lg-1 control-label">Rut:</label>
+					  	<div class="col-lg-2">
+					  		<input type="text" class="form-control"  value="">
+					  	</div>
+					  	<label  class="col-lg-2 control-label">Fecha Solicitud:</label>
+					  	<div class="col-lg-3">
+							<form class="form-horizontal" role="form">
+					  			<div class="form-group">
+					  				<div class="input-group col-lg-4">
+							  			<input type="text" class="form-control col-lg-4" value="">
+									</div>
+									<label  class="col-lg-2 control-label">al</label>
+									<div class="input-group col-lg-4">
+							  			<input type="text" class="form-control" value="">
+									</div>	
+					  			</div>
+					  		</form>
+					  	</div>
+					  	<label  class="col-lg-1 control-label">Estado:</label>
+					  	<div class="col-lg-2">
+					  		<select class="form-control"><option>En evaluación</option></select>
+					  	</div>
+					  	
+				  	</div>
+				</form>
+			</div>
+
+				<div class="col-lg-12">
+					
+					<label class="control-label">Se encontraron 543 solicitudes</label>
+					<table class="table table-striped">
+		              <thead>
+		                <tr>
+		                  <th>ID Sol.</th>
+		                  <th>Fecha Solicitud</th>
+		                  <th>RUT</th>
+		                  <th>Sector</th>
+		                  <th>Subtipo</th>
+		                  <th>Estado</th>
+		                  <th>Fecha</th>
+		                  <th>Acciones</th>
+		                </tr>
+		              </thead>
+		              <tbody>
+		                <tr>
+		                  <td>52235</td>
+		                  <td>29/06/2013</td>
+		                  <td>8955565-7</td>
+		                  <td>Niagara</td>
+		                  <td>Medicamentos</td>
+		                  <td>En evaluación</td>
+		                  <td>05/07/2013</td>
+		                  <td><span class="glyphicon glyphicon-search"></span></td>
+		                </tr>
+		                <tr>
+		                  <td>52235</td>
+		                  <td>29/06/2013</td>
+		                  <td>8955565-7</td>
+		                  <td>Niagara</td>
+		                  <td>Medicamentos</td>
+		                  <td>En evaluación</td>
+		                  <td>05/07/2013</td>
+		                  <td><span class="glyphicon glyphicon-search"></span></td>
+		                </tr>
+		                <tr>
+		                  <td>52235</td>
+		                  <td>29/06/2013</td>
+		                  <td>8955565-7</td>
+		                  <td>Niagara</td>
+		                  <td>Medicamentos</td>
+		                  <td>En evaluación</td>
+		                  <td>05/07/2013</td>
+		                  <td><span class="glyphicon glyphicon-search"></span></td>
+		                </tr>
+		              </tbody>
+		            </table>
+		            <ul class="pagination">
+					  <li class="active"><a href="#">&laquo;</a></li>
+					  <li><a href="#">1</a></li>
+					  <li><a href="#">2</a></li>
+					  <li><a href="#">3</a></li>
+					  <li><a href="#">4</a></li>
+					  <li><a href="#">5</a></li>
+					  <li><a href="#">&raquo;</a></li>
+					</ul>
+
+				</div>	
+
+				
+
+
+			</div>
+
+
+		</div>	
+
+
+    </div>
+</body>
+</html>
